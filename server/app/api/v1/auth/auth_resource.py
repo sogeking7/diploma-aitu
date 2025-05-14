@@ -37,8 +37,8 @@ def login(
         httponly=True,
         secure=True,
         samesite="lax",
-        max_age=settings.SESSION_DURATION_MINUTES * 60,
-        # domain="localhost",
+        max_age=settings.SESSION_DURATION_DAYS * 24 * 60 * 60,
+        domain="localhost",
     )
 
     return TokenModel(access_token=session_token_str, token_type="bearer")

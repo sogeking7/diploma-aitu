@@ -8,7 +8,9 @@ const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
     "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
   },
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(

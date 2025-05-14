@@ -7,7 +7,7 @@ load_dotenv()
 class Settings(BaseSettings):
     NEON_DATABASE_URL: str
     DATABASE_URL: str
-    SESSION_DURATION_MINUTES: int = 30
+    SESSION_DURATION_DAYS: int = 3
     PINECONE_API_KEY: str
     PINECONE_REGION: str
     POSTGRES_USER: str

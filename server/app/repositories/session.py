@@ -11,7 +11,7 @@ from app.core.config import settings
 
 def create_session(db: Session, session_in: SessionCreate) -> DBSession:
     now_utc = datetime.now(timezone.utc)
-    expiration_time = now_utc + timedelta(minutes=settings.SESSION_DURATION_MINUTES)
+    expiration_time = now_utc + timedelta(days=settings.SESSION_DURATION_DAYS)
     db_session = DBSession(
         user_id=session_in.user_id,
         expires_at=expiration_time,
@@ -74,7 +74,7 @@ def logout_session(db: Session, token: uuid.UUID | str) -> Optional[int]:
 def refresh_session(
     db: Session,
     token: uuid.UUID | str,
-    duration_minutes: int = settings.SESSION_DURATION_MINUTES,
+    duration_days: int = settings.SESSION_DURATION_DAYS,
 ) -> Optional[DBSession]:
     if isinstance(token, uuid.UUID):
         token_for_query = str(token)
@@ -82,7 +82,7 @@ def refresh_session(
         token_for_query = token
 
     now_utc = datetime.now(timezone.utc)
-    new_expiration_time = now_utc + timedelta(minutes=duration_minutes)
+    new_expiration_time = now_utc + timedelta(days=duration_days)
 
     session = (
         db.query(DBSession)
