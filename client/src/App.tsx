@@ -1,4 +1,5 @@
-import { Redirect, Route } from "react-router-dom";
+import React from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
 import {
   IonApp,
   IonIcon,
@@ -8,142 +9,123 @@ import {
   IonTabButton,
   IonTabs,
   setupIonicReact,
-  IonLoading,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { ellipse, square, triangle } from "ionicons/icons";
-import Tab1 from "./pages/Tab1";
-import Tab2 from "./pages/Tab2";
-import Tab3 from "./pages/Tab3";
 
-/* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 import "@ionic/react/css/normalize.css";
 import "@ionic/react/css/structure.css";
 import "@ionic/react/css/typography.css";
-
-/* Optional CSS utils that can be commented out */
 import "@ionic/react/css/padding.css";
 import "@ionic/react/css/float-elements.css";
 import "@ionic/react/css/text-alignment.css";
 import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
-
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
 import "@ionic/react/css/palettes/dark.system.css";
-
-/* Theme variables */
 import "./theme/variables.css";
+
 import { AuthProvider, useAuth } from "./contexts/AuthContext/AuthContext";
-import Login from "./pages/auth/login/Login/Login";
-import Register from "./pages/auth/register/Register";
-import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import Login from "./pages/auth/login/Login/Login";
+import Register from "./pages/auth/register/Register";
+import Tab1 from "./pages/Tab1";
+import Tab2 from "./pages/Tab2";
+import Tab3 from "./pages/Tab3";
 
 setupIonicReact();
 
-// Private Route component to protect authenticated routes
-const PrivateRoute: React.FC<{
-  component: React.ComponentType<any>;
-  path: string;
-  exact?: boolean;
-}> = ({ component: Component, ...rest }) => {
+const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) {
-    return <IonLoading isOpen={true} />;
-  }
+  if (loading) return null;
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
-      }
-    />
-  );
+  if (!isAuthenticated) return <Redirect to="/login" />;
+
+  return <>{children}</>;
 };
 
-// Main app with protected tabs
-const AppContent: React.FC = () => {
+const AuthRoutes: React.FC = () => (
+  <Switch>
+    <Route path="/login" exact component={Login} />
+    <Route path="/register" exact component={Register} />
+    <Route path="*">
+      <Redirect to="/login" />
+    </Route>
+  </Switch>
+);
+
+const AppRoutes: React.FC = () => (
+  <IonTabs>
+    <IonRouterOutlet>
+      <Switch>
+        <Route path="/tab1" exact component={Tab1} />
+        <Route path="/tab2" exact component={Tab2} />
+        <Route path="/tab3" exact component={Tab3} />
+        <Route path="/" exact>
+          <Redirect to="/tab1" />
+        </Route>
+        <Route path="*">
+          <Redirect to="/tab1" />
+        </Route>
+      </Switch>
+    </IonRouterOutlet>
+
+    <IonTabBar slot="bottom">
+      <IonTabButton tab="tab1" href="/tab1">
+        <IonIcon aria-hidden="true" icon={triangle} />
+        <IonLabel>Tab 1</IonLabel>
+      </IonTabButton>
+      <IonTabButton tab="tab2" href="/tab2">
+        <IonIcon aria-hidden="true" icon={ellipse} />
+        <IonLabel>Tab 2</IonLabel>
+      </IonTabButton>
+      <IonTabButton tab="tab3" href="/tab3">
+        <IonIcon aria-hidden="true" icon={square} />
+        <IonLabel>Tab 3</IonLabel>
+      </IonTabButton>
+    </IonTabBar>
+  </IonTabs>
+);
+
+const AppRouter: React.FC = () => {
   const { isAuthenticated } = useAuth();
 
   return (
-    <IonApp>
-      <IonReactRouter>
+    <IonReactRouter>
+      <IonRouterOutlet>
         {isAuthenticated ? (
-          <IonTabs>
-            <IonRouterOutlet>
-              <PrivateRoute exact path="/tab1" component={Tab1} />
-              <PrivateRoute exact path="/tab2" component={Tab2} />
-              <PrivateRoute path="/tab3" component={Tab3} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/">
-                <Redirect to="/tab1" />
-              </Route>
-            </IonRouterOutlet>
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="tab1" href="/tab1">
-                <IonIcon aria-hidden="true" icon={triangle} />
-                <IonLabel>Tab 1</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="tab2" href="/tab2">
-                <IonIcon aria-hidden="true" icon={ellipse} />
-                <IonLabel>Tab 2</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="tab3" href="/tab3">
-                <IonIcon aria-hidden="true" icon={square} />
-                <IonLabel>Tab 3</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+          <AuthGuard>
+            <AppRoutes />
+          </AuthGuard>
         ) : (
-          <IonRouterOutlet>
-            <Route path="/login" component={Login} exact />
-            <Route path="/register" component={Register} exact />
-            <Route exact path="/">
-              <Redirect to="/login" />
-            </Route>
-            <Route>
-              <Redirect to="/login" />
-            </Route>
-          </IonRouterOutlet>
+          <AuthRoutes />
         )}
-      </IonReactRouter>
-    </IonApp>
+      </IonRouterOutlet>
+    </IonReactRouter>
   );
 };
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
     },
   },
 });
 
-// Wrap the app with auth provider
 const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
-      <AppContent />
+      <IonApp>
+        <AppRouter />
+      </IonApp>
     </AuthProvider>
-    <ReactQueryDevtools initialIsOpen={false} />
+    {process.env.NODE_ENV !== "production" && (
+      <ReactQueryDevtools initialIsOpen={false} />
+    )}
   </QueryClientProvider>
 );
 
