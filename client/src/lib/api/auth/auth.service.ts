@@ -1,6 +1,5 @@
 import { authApi, usersApi } from "../api.service";
-import { UserOut } from "../../open-api";
-import Cookies from "js-cookie";
+import { RoleEnum, UserOut } from "../../open-api";
 
 export interface LoginCredentials {
   email: string;
@@ -8,9 +7,11 @@ export interface LoginCredentials {
 }
 
 export interface RegisterCredentials {
-  email: string;
+  first_name: string;
+  last_name: string;
   password: string;
-  name: string;
+  email: string;
+  role: RoleEnum;
 }
 
 const AuthService = {
@@ -23,13 +24,7 @@ const AuthService = {
   },
 
   async register(credentials: RegisterCredentials): Promise<void> {
-    await authApi.registerApiV1AuthRegisterPost({
-      first_name: credentials.name,
-      last_name: credentials.name,
-      email: credentials.email,
-      password: credentials.password,
-      role: "admin",
-    });
+    await authApi.registerApiV1AuthRegisterPost(credentials);
   },
 
   setTokens(session_token: string): void {

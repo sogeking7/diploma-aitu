@@ -12,6 +12,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => Promise<void>;
+  fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
@@ -27,15 +28,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const initAuth = async () => {
-      try {
-        const userData = await AuthService.getCurrentUser();
-        setUser(userData);
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error("Failed to get user data", error);
-        AuthService.clearTokens();
-        setIsAuthenticated(false);
-      }
+      await fetchUser();
       setLoading(false);
     };
 
@@ -73,6 +66,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const fetchUser = async () => {
+    try {
+      const userData = await AuthService.getCurrentUser();
+      setUser(userData);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Failed to get user data", error);
+      AuthService.clearTokens();
+      setIsAuthenticated(false);
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -80,6 +85,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     login,
     register,
     logout,
+    fetchUser,
   };
 
   return (

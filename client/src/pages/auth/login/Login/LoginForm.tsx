@@ -1,5 +1,5 @@
 import React from "react";
-import { IonButton, IonItem, IonLabel, IonInput, IonText } from "@ionic/react";
+import { IonButton, IonItem, IonInput, IonText } from "@ionic/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginFormValues, loginSchema } from "../../../../schemas/loginSchema";
@@ -36,13 +36,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
       )}
 
       <IonItem>
-        <IonLabel position="floating">Email</IonLabel>
         <Controller
           name="email"
           control={control}
           render={({ field }) => (
             <IonInput
               labelPlacement="floating"
+              label="Email"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
@@ -59,12 +59,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
       </IonItem>
 
       <IonItem>
-        <IonLabel position="floating">Password</IonLabel>
         <Controller
           name="password"
           control={control}
           render={({ field }) => (
             <IonInput
+              label="Password"
               type="password"
               labelPlacement="floating"
               value={field.value}

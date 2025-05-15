@@ -6,23 +6,24 @@ import {
   IonTitle,
   IonToolbar,
   IonLoading,
+  useIonRouter,
 } from "@ionic/react";
-import { useHistory } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "../../../../contexts/AuthContext/AuthContext";
 import { LoginFormValues } from "../../../../schemas/loginSchema";
 import LoginForm from "./LoginForm";
 
 const Login: React.FC = () => {
-  const { login } = useAuth();
-  const history = useHistory();
+  const { login, fetchUser } = useAuth();
+  const router = useIonRouter();
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormValues) => {
       return login({ email: data.email, password: data.password });
     },
-    onSuccess: () => {
-      history.replace("/dashboard");
+    onSuccess: async () => {
+      await fetchUser();
+      router.push("/profile");
     },
   });
 

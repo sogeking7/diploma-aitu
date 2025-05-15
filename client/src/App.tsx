@@ -11,7 +11,7 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { ellipse, square, triangle } from "ionicons/icons";
+import { ellipse, personCircle, triangle } from "ionicons/icons";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -36,10 +36,10 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Login from "./pages/auth/login/Login/Login";
-import Register from "./pages/auth/register/Register";
+import Register from "./pages/auth/register/Register/Register";
 import Tab1 from "./pages/Tab1";
 import Tab2 from "./pages/Tab2";
-import Tab3 from "./pages/Tab3";
+import Profile from "./pages/profile/Profile/Profile";
 
 setupIonicReact();
 
@@ -69,12 +69,12 @@ const AppRoutes: React.FC = () => (
       <Switch>
         <Route path="/tab1" exact component={Tab1} />
         <Route path="/tab2" exact component={Tab2} />
-        <Route path="/tab3" exact component={Tab3} />
+        <Route path="/profile" exact component={Profile} />
         <Route path="/" exact>
-          <Redirect to="/tab1" />
+          <Redirect to="/profile" />
         </Route>
         <Route path="*">
-          <Redirect to="/tab1" />
+          <Redirect to="/profile" />
         </Route>
       </Switch>
     </IonRouterOutlet>
@@ -88,9 +88,9 @@ const AppRoutes: React.FC = () => (
         <IonIcon aria-hidden="true" icon={ellipse} />
         <IonLabel>Tab 2</IonLabel>
       </IonTabButton>
-      <IonTabButton tab="tab3" href="/tab3">
-        <IonIcon aria-hidden="true" icon={square} />
-        <IonLabel>Tab 3</IonLabel>
+      <IonTabButton tab="profile" href="/profile">
+        <IonIcon aria-hidden="true" icon={personCircle} />
+        <IonLabel>Profile</IonLabel>
       </IonTabButton>
     </IonTabBar>
   </IonTabs>
@@ -114,13 +114,7 @@ const AppRouter: React.FC = () => {
   );
 };
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 const App: React.FC = () => (
   <QueryClientProvider client={queryClient}>
