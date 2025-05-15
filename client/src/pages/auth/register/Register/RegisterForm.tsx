@@ -45,17 +45,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           control={control}
           render={({ field, fieldState }) => (
             <IonInput
-              labelPlacement="floating"
+              labelPlacement="stacked"
               label="Name"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
               onIonBlur={field.onBlur}
               errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
+              className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
             />
           )}
         />
@@ -67,17 +64,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           control={control}
           render={({ field, fieldState }) => (
             <IonInput
-              labelPlacement="floating"
+              labelPlacement="stacked"
               label="Last Name"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
               onIonBlur={field.onBlur}
               errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
+              className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
             />
           )}
         />
@@ -89,17 +83,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           control={control}
           render={({ field, fieldState }) => (
             <IonInput
-              labelPlacement="floating"
+              labelPlacement="stacked"
               label="Email"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               onIonBlur={field.onBlur}
               disabled={isLoading}
               errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
+              className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
             />
           )}
         />
@@ -113,16 +104,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             <IonInput
               label="Password"
               type="password"
-              labelPlacement="floating"
+              labelPlacement="stacked"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
               onIonBlur={field.onBlur}
               errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
+              className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
             >
               <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
             </IonInput>
@@ -138,16 +126,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             <IonInput
               label="Confirm Password"
               type="password"
-              labelPlacement="floating"
+              labelPlacement="stacked"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
               onIonBlur={field.onBlur}
               errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
+              className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
             >
               <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
             </IonInput>

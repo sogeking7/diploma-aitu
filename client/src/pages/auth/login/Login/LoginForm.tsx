@@ -5,6 +5,7 @@ import {
   IonInput,
   IonText,
   IonInputPasswordToggle,
+  IonLabel,
 } from "@ionic/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,49 +38,49 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </IonText>
       )}
 
-      <IonItem>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field, fieldState }) => (
-            <IonInput
-              labelPlacement="floating"
-              label="Email"
-              value={field.value}
-              onIonChange={(e) => field.onChange(e.detail.value!)}
-              onIonBlur={field.onBlur}
-              disabled={isLoading}
-              errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
-            />
-          )}
-        />
-      </IonItem>
+      <div>
+        <IonItem>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState }) => (
+              <>
+                <IonInput
+                  labelPlacement="stacked"
+                  label="Email"
+                  value={field.value}
+                  onIonChange={(e) => field.onChange(e.detail.value!)}
+                  onIonBlur={field.onBlur}
+                  disabled={isLoading}
+                  errorText={fieldState.error?.message}
+                  className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
+                />
+              </>
+            )}
+          />
+        </IonItem>
+      </div>
 
       <IonItem>
         <Controller
           name="password"
           control={control}
           render={({ field, fieldState }) => (
-            <IonInput
-              label="Password"
-              type="password"
-              labelPlacement="floating"
-              value={field.value}
-              onIonChange={(e) => field.onChange(e.detail.value!)}
-              onIonBlur={field.onBlur}
-              disabled={isLoading}
-              errorText={fieldState.error?.message}
-              className={`
-                ${fieldState.invalid && "ion-invalid"} 
-                ${fieldState.isTouched && "ion-touched"}
-              `}
-            >
-              <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
-            </IonInput>
+            <>
+              <IonInput
+                label="Password"
+                type="password"
+                labelPlacement="stacked"
+                value={field.value}
+                onIonChange={(e) => field.onChange(e.detail.value!)}
+                onIonBlur={field.onBlur}
+                disabled={isLoading}
+                errorText={fieldState.error?.message}
+                className={`${fieldState.invalid && "ion-invalid"} ${fieldState.isTouched && "ion-touched"}`}
+              >
+                <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+              </IonInput>
+            </>
           )}
         />
       </IonItem>
