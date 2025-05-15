@@ -27,6 +27,10 @@ const AuthService = {
     await authApi.registerApiV1AuthRegisterPost(credentials);
   },
 
+  async logout(): Promise<void> {
+    await authApi.logoutApiV1AuthLogoutPost();
+  },
+
   setTokens(session_token: string): void {
     localStorage.setItem("session_token", session_token);
   },

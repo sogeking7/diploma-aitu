@@ -58,8 +58,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = async () => {
     setLoading(true);
     try {
-      // await AuthService.logout();
+      await AuthService.logout();
       setUser(null);
+      AuthService.clearTokens();
       setIsAuthenticated(false);
     } finally {
       setLoading(false);

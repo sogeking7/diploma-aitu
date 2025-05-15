@@ -13,12 +13,21 @@ import {
   IonLabel,
   IonAvatar,
   IonIcon,
+  IonButton,
 } from "@ionic/react";
-import { personCircle, mail, school } from "ionicons/icons";
+import { personCircle, mail, school, logOut } from "ionicons/icons";
 import { useAuth } from "../../../contexts/AuthContext/AuthContext";
 
 const Profile: React.FC = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   if (!user) {
     return (
@@ -78,6 +87,12 @@ const Profile: React.FC = () => {
             </IonItem>
           </IonCardContent>
         </IonCard>
+        <div className="ion-text-center ion-padding">
+          <IonButton expand="block" color="secondary" onClick={handleLogout}>
+            <IonIcon slot="start" icon={logOut} />
+            Logout
+          </IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );
