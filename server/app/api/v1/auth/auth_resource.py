@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from fastapi import Request
 
 from app.core.config import settings
 from app.schemas.auth import TokenModel
@@ -38,7 +39,28 @@ def login(
         secure=True,
         samesite="lax",
         max_age=settings.SESSION_DURATION_DAYS * 24 * 60 * 60,
-        domain="localhost",
+        # domain="localhost",
     )
 
     return TokenModel(access_token=session_token_str, token_type="bearer")
+
+
+@router.post("/logout", status_code=status.HTTP_201_CREATED)
+def logout(
+    db: Session = Depends(get_db), response: Response = None, request: Request = None
+):
+    session_token = request.cookies.get("session_token")
+
+    print(session_token)
+
+    user_id = auth_service.logout_user(db=db, session_id=session_token)
+
+    response.delete_cookie(
+        key="session_token",
+        httponly=True,
+        secure=True,
+        samesite="lax",
+        # domain="localhost",
+    )
+
+    return {"user_id": user_id}

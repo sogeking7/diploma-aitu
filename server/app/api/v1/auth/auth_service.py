@@ -5,6 +5,7 @@ from app.schemas.session import SessionCreate
 from app.schemas.user import UserCreate
 from app.repositories.user import get_user_by_email, authenticate_user, insert_user
 from app.repositories.session import create_session as create_db_session
+from app.repositories.session import logout_session as logout_db_session
 
 from pydantic import EmailStr
 
@@ -30,3 +31,8 @@ def login_user(db: Session, username: EmailStr, password: str):
     db_session = create_db_session(db=db, session_in=session_in)
 
     return db_session
+
+
+def logout_user(db: Session, session_id: str) -> int | None:
+    user_id: int | None = logout_db_session(db=db, token=session_id)
+    return user_id
