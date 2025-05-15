@@ -14,15 +14,14 @@ import { LoginFormValues } from "../../../../schemas/loginSchema";
 import LoginForm from "./LoginForm";
 
 const Login: React.FC = () => {
-  const { login, fetchUser } = useAuth();
+  const { login } = useAuth();
   const router = useIonRouter();
 
   const loginMutation = useMutation({
     mutationFn: (data: LoginFormValues) => {
       return login({ email: data.email, password: data.password });
     },
-    onSuccess: async () => {
-      await fetchUser();
+    onSuccess: () => {
       router.push("/profile");
     },
   });

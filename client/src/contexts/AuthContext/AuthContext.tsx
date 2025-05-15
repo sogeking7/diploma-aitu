@@ -12,11 +12,9 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (credentials: RegisterCredentials) => Promise<void>;
   logout: () => Promise<void>;
-  fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({} as AuthContextType);
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -27,45 +25,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const initAuth = async () => {
-      await fetchUser();
-      setLoading(false);
-    };
-
-    initAuth();
+    fetchUser();
   }, []);
-
-  const login = async (credentials: LoginCredentials) => {
-    setLoading(true);
-    try {
-      await AuthService.login(credentials);
-      setIsAuthenticated(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const register = async (credentials: RegisterCredentials) => {
-    setLoading(true);
-    try {
-      await AuthService.register(credentials);
-      setIsAuthenticated(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const logout = async () => {
-    setLoading(true);
-    try {
-      await AuthService.logout();
-      setUser(null);
-      AuthService.clearTokens();
-      setIsAuthenticated(false);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fetchUser = async () => {
     try {
@@ -76,18 +37,38 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       console.error("Failed to get user data", error);
       AuthService.clearTokens();
       setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const value = {
-    user,
-    loading,
-    isAuthenticated,
-    login,
-    register,
-    logout,
-    fetchUser,
+  const login = async (credentials: LoginCredentials) => {
+    await AuthService.login(credentials);
+    const userData = await AuthService.getCurrentUser();
+    setUser(userData);
+    setIsAuthenticated(true);
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const register = async (credentials: RegisterCredentials) => {
+    await AuthService.register(credentials);
+  };
+
+  const logout = async () => {
+    try {
+      await AuthService.logout();
+      AuthService.clearTokens();
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ user, loading, isAuthenticated, login, register, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };

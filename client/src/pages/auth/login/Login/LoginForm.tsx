@@ -5,7 +5,6 @@ import {
   IonInput,
   IonText,
   IonInputPasswordToggle,
-  IonLabel,
 } from "@ionic/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
