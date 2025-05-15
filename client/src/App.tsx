@@ -40,18 +40,9 @@ import Register from "./pages/auth/register/Register/Register";
 import Tab1 from "./pages/Tab1";
 import Tab2 from "./pages/Tab2";
 import Profile from "./pages/profile/Profile/Profile";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 setupIonicReact();
-
-const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, loading } = useAuth();
-
-  if (loading) return null;
-
-  if (!isAuthenticated) return <Redirect to="/login" />;
-
-  return <>{children}</>;
-};
 
 const AuthRoutes: React.FC = () => (
   <Switch>
@@ -103,9 +94,7 @@ const AppRouter: React.FC = () => {
     <IonReactRouter>
       <IonRouterOutlet>
         {isAuthenticated ? (
-          <AuthGuard>
-            <AppRoutes />
-          </AuthGuard>
+          <PrivateRoute component={AppRoutes} />
         ) : (
           <AuthRoutes />
         )}

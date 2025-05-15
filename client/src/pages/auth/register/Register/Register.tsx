@@ -51,8 +51,8 @@ const Register: React.FC = () => {
           onSubmit={handleSubmit}
           isLoading={registerMutation.isPending}
           error={
-            registerMutation.isError
-              ? "Failed to register. Please check your information."
+            registerMutation.isError && "response" in registerMutation.error
+              ? (registerMutation.error.response as any)?.data?.message
               : undefined
           }
         />

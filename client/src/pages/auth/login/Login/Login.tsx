@@ -45,8 +45,8 @@ const Login: React.FC = () => {
           onSubmit={handleSubmit}
           isLoading={loginMutation.isPending}
           error={
-            loginMutation.isError
-              ? "Failed to login. Please check your credentials."
+            loginMutation.isError && "response" in loginMutation.error
+              ? (loginMutation.error.response as any)?.data?.message
               : undefined
           }
         />

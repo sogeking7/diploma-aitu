@@ -2,7 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import { Configuration } from "../open-api";
 import { UsersApi, AuthApi } from "../open-api";
 
-const API_URL = "http://localhost:8000";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL: API_URL,

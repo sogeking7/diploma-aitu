@@ -1,5 +1,11 @@
 import React from "react";
-import { IonButton, IonItem, IonInput, IonText } from "@ionic/react";
+import {
+  IonButton,
+  IonItem,
+  IonInput,
+  IonText,
+  IonInputPasswordToggle,
+} from "@ionic/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,19 +24,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
   isLoading,
   error,
 }) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<RegisterFormValues>({
+  const { control, handleSubmit } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
       role: "student",
-      email: "",
-      password: "",
-      confirmPassword: "",
     },
   });
 
@@ -46,76 +43,73 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         <Controller
           name="first_name"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <IonInput
               labelPlacement="floating"
               label="Name"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
+              onIonBlur={field.onBlur}
+              errorText={fieldState.error?.message}
+              className={`
+                ${fieldState.invalid && "ion-invalid"} 
+                ${fieldState.isTouched && "ion-touched"}
+              `}
             />
           )}
         />
-        {errors.first_name && (
-          <IonText color="danger" className="ion-padding-start">
-            <p className="ion-no-margin ion-padding-top">
-              {errors.first_name.message}
-            </p>
-          </IonText>
-        )}
       </IonItem>
 
       <IonItem>
         <Controller
           name="last_name"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <IonInput
               labelPlacement="floating"
               label="Last Name"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
+              onIonBlur={field.onBlur}
+              errorText={fieldState.error?.message}
+              className={`
+                ${fieldState.invalid && "ion-invalid"} 
+                ${fieldState.isTouched && "ion-touched"}
+              `}
             />
           )}
         />
-        {errors.last_name && (
-          <IonText color="danger" className="ion-padding-start">
-            <p className="ion-no-margin ion-padding-top">
-              {errors.last_name.message}
-            </p>
-          </IonText>
-        )}
       </IonItem>
 
       <IonItem>
         <Controller
           name="email"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <IonInput
               labelPlacement="floating"
               label="Email"
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
+              onIonBlur={field.onBlur}
               disabled={isLoading}
+              errorText={fieldState.error?.message}
+              className={`
+                ${fieldState.invalid && "ion-invalid"} 
+                ${fieldState.isTouched && "ion-touched"}
+              `}
             />
           )}
         />
-        {errors.email && (
-          <IonText color="danger" className="ion-padding-start">
-            <p className="ion-no-margin ion-padding-top">
-              {errors.email.message}
-            </p>
-          </IonText>
-        )}
       </IonItem>
 
       <IonItem>
         <Controller
           name="password"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <IonInput
               label="Password"
               type="password"
@@ -123,23 +117,24 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
-            />
+              onIonBlur={field.onBlur}
+              errorText={fieldState.error?.message}
+              className={`
+                ${fieldState.invalid && "ion-invalid"} 
+                ${fieldState.isTouched && "ion-touched"}
+              `}
+            >
+              <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+            </IonInput>
           )}
         />
-        {errors.password && (
-          <IonText color="danger" className="ion-padding-start">
-            <p className="ion-no-margin ion-padding-top">
-              {errors.password.message}
-            </p>
-          </IonText>
-        )}
       </IonItem>
 
       <IonItem>
         <Controller
           name="confirmPassword"
           control={control}
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <IonInput
               label="Confirm Password"
               type="password"
@@ -147,16 +142,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               value={field.value}
               onIonChange={(e) => field.onChange(e.detail.value!)}
               disabled={isLoading}
-            />
+              onIonBlur={field.onBlur}
+              errorText={fieldState.error?.message}
+              className={`
+                ${fieldState.invalid && "ion-invalid"} 
+                ${fieldState.isTouched && "ion-touched"}
+              `}
+            >
+              <IonInputPasswordToggle slot="end"></IonInputPasswordToggle>
+            </IonInput>
           )}
         />
-        {errors.confirmPassword && (
-          <IonText color="danger" className="ion-padding-start">
-            <p className="ion-no-margin ion-padding-top">
-              {errors.confirmPassword.message}
-            </p>
-          </IonText>
-        )}
       </IonItem>
 
       <IonButton
