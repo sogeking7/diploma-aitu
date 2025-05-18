@@ -18,3 +18,4 @@ class ClassUpdate(BaseModel):
 
 class ClassOut(ClassBase):
     id: int
+    model_config = {"from_attributes": True}

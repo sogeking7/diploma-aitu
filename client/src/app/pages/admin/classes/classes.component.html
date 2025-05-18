@@ -1,0 +1,32 @@
+<nz-table
+  #userTable
+  [nzFrontPagination]="false"
+  [nzData]="classes"
+  nzBordered
+  nzShowPagination
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzPageIndex]="page"
+  [nzPageSize]="count"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Teacher ID</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of userTable.data">
+      <td>{{ u.id }}</td>
+      <td>{{ u.name }}</td>
+      <td>{{ u.teacher_user_id }}</td>
+      <td>
+        <button nz-button nzType="link">View</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

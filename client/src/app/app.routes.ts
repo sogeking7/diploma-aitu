@@ -22,6 +22,10 @@ export const routes: Routes = [
         path: 'users',
         loadChildren: () => import('./pages/admin/users/users.routes').then(m => m.USERS_ROUTES),
       },
+      {
+        path: 'classes',
+        loadChildren: () => import('./pages/admin/classes/classes.routes').then(m => m.CLASSES_ROUTES),
+      },
     ],
   },
   {

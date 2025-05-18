@@ -1,4 +1,4 @@
-import {RoleEnum} from './open-api';
+import { RoleEnum } from './open-api';
 
 export function getRoleTagColor(role: RoleEnum): string {
   switch (role) {

@@ -11,11 +11,11 @@ import { RoleEnum } from './role-enum';
 
 
 export interface UserOut { 
-    id: number;
     first_name: string;
     last_name: string;
     email: string;
     role: RoleEnum;
+    id: number;
 }
 export namespace UserOut {
 }

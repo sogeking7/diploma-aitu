@@ -8,6 +8,7 @@ export * from './class-student-out';
 export * from './class-student-update';
 export * from './class-update';
 export * from './http-validation-error';
+export * from './page-class-out';
 export * from './page-user-out';
 export * from './parent-student-create';
 export * from './parent-student-out';

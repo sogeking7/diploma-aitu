@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
+from fastapi_pagination import Page
 from sqlalchemy.orm import Session
-from typing import List
 
 from app.api.dependencies import get_db, get_current_user
 from app.models.user import User
@@ -29,17 +29,15 @@ def update_class(
     return class_service.update_class(db=db, class_id=class_id, class_in=class_in)
 
 
-@router.get("/", response_model=List[ClassOut])
+@router.get("/", response_model=Page[ClassOut])
 def read_classes(
-    skip: int = 0,
-    limit: int = 100,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return class_service.get_classes(db, skip=skip, limit=limit)
+    return class_service.get_classes(db)
 
 
-@router.get("/teacher/{teacher_id}", response_model=List[ClassOut])
+@router.get("/teacher/{teacher_id}", response_model=Page[ClassOut])
 def read_classes_by_teacher(
     teacher_id: int,
     db: Session = Depends(get_db),

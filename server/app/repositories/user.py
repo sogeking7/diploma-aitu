@@ -45,6 +45,11 @@ def update_user(db: Session, user_id: int, user_in: UserUpdate) -> UserOut:
     user = get_active_users(db).filter_by(id=user_id).first()
     if not user:
         raise ValueError(f"User {user_id} not found")
+
+    update_data = user_in.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(user, field, value)
+
     db.commit()
     db.refresh(user)
     return UserOut.model_validate(user)

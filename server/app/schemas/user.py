@@ -10,28 +10,22 @@ class RoleEnum(str, Enum):
 
 
 class UserBase(BaseModel):
-    id: int
     first_name: str
     last_name: str
     email: EmailStr
     role: RoleEnum
 
 
-class UserCreate(BaseModel):
-    first_name: str
-    last_name: str
-    email: EmailStr
-    role: RoleEnum
+class UserCreate(UserBase):
+    pass
 
 
-class UserUpdate(BaseModel):
-    first_name: str
-    last_name: str
-    email: EmailStr
-    role: RoleEnum
+class UserUpdate(UserBase):
+    pass
 
 
 class UserOut(UserBase):
+    id: int
     model_config = {"from_attributes": True}
 
 
