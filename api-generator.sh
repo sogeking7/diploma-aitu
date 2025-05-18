@@ -21,7 +21,7 @@ echo "Generating TypeScript services from OpenAPI schema..."
 
 npx @openapitools/openapi-generator-cli generate \
     -i "$API_URL" \
-    -g typescript-axios \
+    -g typescript-angular \
     -o "$OUTPUT_DIR" \
     --api-package=api \
     --invoker-package=invoker \

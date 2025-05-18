@@ -1,0 +1,40 @@
+<nz-table
+  #userTable
+  [nzFrontPagination]="false"
+  [nzData]="users"
+  nzBordered
+  nzShowPagination
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzPageIndex]="pageIndex"
+  [nzPageSize]="pageSize"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of userTable.data">
+      <td>{{ u.id }}</td>
+      <td>{{ u.first_name }}</td>
+      <td>{{ u.last_name }}</td>
+      <td>{{ u.email }}</td>
+      <td>
+        <nz-tag [nzColor]="getRoleTagColor(u.role)">
+          {{ u.role }}
+        </nz-tag>
+      </td>
+      <td>
+        <button nz-button nzType="link">View</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

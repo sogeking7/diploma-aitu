@@ -1,0 +1,15 @@
+export * from './attendances.service';
+import { AttendancesService } from './attendances.service';
+export * from './auth.service';
+import { AuthService } from './auth.service';
+export * from './class-students.service';
+import { ClassStudentsService } from './class-students.service';
+export * from './classes.service';
+import { ClassesService } from './classes.service';
+export * from './health.service';
+import { HealthService } from './health.service';
+export * from './parent-students.service';
+import { ParentStudentsService } from './parent-students.service';
+export * from './users.service';
+import { UsersService } from './users.service';
+export const APIS = [AttendancesService, AuthService, ClassStudentsService, ClassesService, HealthService, ParentStudentsService, UsersService];

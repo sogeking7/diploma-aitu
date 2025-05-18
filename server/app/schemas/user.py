@@ -10,14 +10,18 @@ class RoleEnum(str, Enum):
 
 
 class UserBase(BaseModel):
+    id: int
     first_name: str
     last_name: str
     email: EmailStr
     role: RoleEnum
 
 
-class UserCreate(UserBase):
-    password: str
+class UserCreate(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    role: RoleEnum
 
 
 class UserUpdate(BaseModel):
@@ -28,7 +32,7 @@ class UserUpdate(BaseModel):
 
 
 class UserOut(UserBase):
-    id: int
+    model_config = {"from_attributes": True}
 
 
 class Login(BaseModel):
