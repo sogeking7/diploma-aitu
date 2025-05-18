@@ -7,11 +7,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UserOut } from './user-out';
 
 
 export interface ClassStudentOut { 
     class_id: number;
     student_user_id: number;
     id: number;
+    student_user: UserOut | null;
 }
 

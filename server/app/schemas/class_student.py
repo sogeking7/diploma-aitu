@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional
-from datetime import datetime
+from app.schemas.user import UserOut
 
 
 class ClassStudentBase(BaseModel):
@@ -19,4 +19,5 @@ class ClassStudentUpdate(ClassStudentBase):
 
 class ClassStudentOut(ClassStudentBase):
     id: int
+    student_user: Optional[UserOut]
     model_config = {"from_attributes": True}

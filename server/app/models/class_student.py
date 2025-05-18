@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, Boolean, DateTime, UniqueConstraint
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.db.session import Base
@@ -17,4 +18,11 @@ class ClassStudent(Base):
 
     __table_args__ = (
         UniqueConstraint("class_id", "student_user_id", name="unique_class_student"),
+    )
+
+    student_user = relationship(
+        "User",
+        primaryjoin="ClassStudent.student_user_id == User.id",
+        foreign_keys=[student_user_id],
+        uselist=False,
     )

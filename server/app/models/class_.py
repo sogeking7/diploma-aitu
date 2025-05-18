@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, and_
+from sqlalchemy.orm import relationship, foreign
 from sqlalchemy.sql import func
 
 from app.db.session import Base
@@ -21,4 +21,10 @@ class Class(Base):
         primaryjoin="Class.teacher_user_id == User.id",
         foreign_keys=[teacher_user_id],
         uselist=False,
+    )
+
+    students = relationship(
+        "ClassStudent",
+        primaryjoin="and_(Class.id == ClassStudent.class_id, ClassStudent.deleted == false())",
+        foreign_keys="[ClassStudent.class_id]",
     )

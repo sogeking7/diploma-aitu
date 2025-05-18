@@ -19,8 +19,9 @@
     <tr>
       <th>ID</th>
       <th>Name</th>
-      <th width="100px">Teacher ID</th>
+      <th>Teacher ID</th>
       <th>Teacher</th>
+      <th>Students count</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -34,6 +35,9 @@
       <td>
         <nz-icon nzType="user" nzTheme="outline" />
         {{ c.teacher_user.first_name + ' ' + c.teacher_user.last_name }}
+      </td>
+      <td>
+        {{ c.enrolled_students_count || 0 }}
       </td>
       <td>
         <button nz-button nzType="link" (click)="openEditDrawer(c)">
@@ -59,7 +63,13 @@
 </nz-table>
 
 <!-- Class Drawer for both edit and view -->
-<nz-drawer [nzVisible]="drawerVisible" [nzWidth]="500" [nzClosable]="true" [nzTitle]="drawerTitle" [nzFooter]="footerTpl" (nzOnClose)="closeDrawer()">
+<nz-drawer
+  [nzVisible]="drawerVisible"
+  [nzSize]="'large'"
+  [nzClosable]="true"
+  [nzTitle]="drawerTitle"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="closeDrawer()">
   <ng-container *nzDrawerContent>
     <!-- Edit Mode -->
     <form nz-form *ngIf="drawerMode === 'edit' && editForm" [formGroup]="editForm" (ngSubmit)="updateClass()">
@@ -92,6 +102,7 @@
     </form>
 
     <!-- View Mode -->
+
     <div class="class-details" *ngIf="drawerMode === 'view' && selectedClass">
       <nz-descriptions nzBordered [nzColumn]="1">
         <nz-descriptions-item nzTitle="ID">{{ selectedClass.id }}</nz-descriptions-item>
@@ -101,6 +112,123 @@
           {{ getTeacherName(selectedClass.teacher_user_id) }}
         </nz-descriptions-item>
       </nz-descriptions>
+    </div>
+
+    <!-- Add this inside your drawer content, after the class details section -->
+    <div *ngIf="selectedClass">
+      <nz-divider></nz-divider>
+
+      <!-- Edit Mode - Full student management features -->
+      <div class="student-management" *ngIf="drawerMode === 'edit'">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
+          <h3>Enrolled Students</h3>
+
+          <!-- Add Student Form -->
+          <div style="display: flex; gap: 8px; align-items: center">
+            <nz-select
+              nzShowSearch
+              nzPlaceHolder="Select student to add"
+              [(ngModel)]="selectedStudentId"
+              [nzLoading]="loadingAvailableStudents"
+              (nzOnSearch)="searchStudents($event)"
+              style="min-width: 200px">
+              <nz-option
+                *ngFor="let student of studentSearchResults"
+                [nzValue]="student.id"
+                [nzLabel]="getStudentDisplayName(student)"
+                [nzDisabled]="isStudentEnrolled(student.id)">
+              </nz-option>
+            </nz-select>
+            <button
+              nz-button
+              nzType="primary"
+              [nzLoading]="isAddingStudent"
+              [disabled]="!selectedStudentId || isAddingStudent"
+              (click)="addStudentToClass()">
+              <i nz-icon nzType="user-add"></i> Add Student
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="loadingStudents">
+          <nz-spin nzTip="Loading students..."></nz-spin>
+        </div>
+
+        <div *ngIf="!loadingStudents">
+          <nz-table
+            #editStudentsTable
+            [nzData]="enrolledStudents"
+            [nzPageSize]="10"
+            [nzLoading]="loadingStudents"
+            [nzShowPagination]="enrolledStudents.length > 10">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of editStudentsTable.data">
+                <td>{{ student.student_user?.id }}</td>
+                <td>{{ student.student_user?.first_name }}</td>
+                <td>{{ student.student_user?.last_name }}</td>
+                <td>{{ student.student_user?.email }}</td>
+                <td>
+                  <button
+                    nz-button
+                    nzType="link"
+                    nz-popconfirm
+                    nzPopconfirmTitle="Are you sure you want to remove this student from the class?"
+                    nzPopconfirmPlacement="left"
+                    (nzOnConfirm)="removeStudentFromClass(student.id)"
+                    nzOkText="Yes"
+                    nzCancelText="No">
+                    <i nz-icon nzType="user-delete" nzTheme="outline" style="color: #ff4d4f"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
+
+      <!-- View Mode - Read-only student list -->
+      <div class="student-list" *ngIf="drawerMode === 'view'">
+        <h3>Enrolled Students</h3>
+
+        <div *ngIf="loadingStudents">
+          <nz-spin nzTip="Loading students..."></nz-spin>
+        </div>
+
+        <div *ngIf="!loadingStudents">
+          <nz-table
+            #viewStudentsTable
+            [nzData]="enrolledStudents"
+            [nzPageSize]="10"
+            [nzLoading]="loadingStudents"
+            [nzShowPagination]="enrolledStudents.length > 10">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of viewStudentsTable.data">
+                <td>{{ student.student_user?.id }}</td>
+                <td>{{ student.student_user?.first_name }}</td>
+                <td>{{ student.student_user?.last_name }}</td>
+                <td>{{ student.student_user?.email }}</td>
+              </tr>
+            </tbody>
+          </nz-table>
+        </div>
+      </div>
     </div>
   </ng-container>
 

@@ -15,5 +15,6 @@ export interface ClassOut {
     teacher_user_id: number;
     id: number;
     teacher_user: UserBase;
+    enrolled_students_count?: number | null;
 }
 

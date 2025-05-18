@@ -28,4 +28,5 @@ class ClassOut(ClassBase):
     id: int
     name: str
     teacher_user: UserBase
+    enrolled_students_count: Optional[int] = 0
     model_config = {"from_attributes": True}
