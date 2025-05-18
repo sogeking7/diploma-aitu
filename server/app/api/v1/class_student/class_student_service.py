@@ -1,13 +1,13 @@
 from fastapi import HTTPException, status
-from typing import Optional, List
+from typing import Optional
 from sqlalchemy.orm import Session
+from fastapi_pagination import Page
 
-from app.models.class_student import ClassStudent
-from app.schemas.class_student import ClassStudentCreate, ClassStudentUpdate
+from app.schemas.class_student import ClassStudentCreate, ClassStudentUpdate, ClassStudentOut
 from app.repositories import class_student as class_student_repo
 
 
-def get_class_student(db: Session, class_student_id: int) -> Optional[ClassStudent]:
+def get_class_student(db: Session, class_student_id: int) -> Optional[ClassStudentOut]:
     db_class_student = class_student_repo.get_class_student(
         db, class_student_id=class_student_id
     )
@@ -19,16 +19,16 @@ def get_class_student(db: Session, class_student_id: int) -> Optional[ClassStude
 
 
 def get_class_students(
-    db: Session, skip: int = 0, limit: int = 100
-) -> List[ClassStudent]:
-    return class_student_repo.get_class_students(db, skip=skip, limit=limit)
+    db: Session
+) -> Page[ClassStudentOut]:
+    return class_student_repo.get_class_students(db)
 
 
-def get_students_by_class(db: Session, class_id: int) -> List[ClassStudent]:
+def get_students_by_class(db: Session, class_id: int) -> Page[ClassStudentOut]:
     return class_student_repo.get_students_by_class(db, class_id=class_id)
 
 
-def get_classes_by_student(db: Session, student_user_id: int) -> List[ClassStudent]:
+def get_classes_by_student(db: Session, student_user_id: int) -> Page[ClassStudentOut]:
     return class_student_repo.get_classes_by_student(
         db, student_user_id=student_user_id
     )
@@ -36,7 +36,7 @@ def get_classes_by_student(db: Session, student_user_id: int) -> List[ClassStude
 
 def create_class_student(
     db: Session, class_student_in: ClassStudentCreate
-) -> ClassStudent:
+) -> ClassStudentOut:
     try:
         return class_student_repo.insert_class_student(db, class_student_in)
     except ValueError as e:
@@ -45,7 +45,7 @@ def create_class_student(
 
 def update_class_student(
     db: Session, class_student_id: int, class_student_in: ClassStudentUpdate
-) -> ClassStudent:
+) -> ClassStudentOut:
     try:
         return class_student_repo.update_class_student(
             db, class_student_id, class_student_in
@@ -55,19 +55,18 @@ def update_class_student(
 
 
 def delete_class_student(db: Session, class_student_id: int) -> None:
-    db_class_student = class_student_repo.get_class_student(db, class_student_id)
-    if not db_class_student:
+    try:
+        class_student_repo.soft_delete_class_student(db, class_student_id)
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Class-Student relationship with id {class_student_id} not found",
+            detail=str(e),
         )
-
-    class_student_repo.soft_delete_class_student(db, db_class_student)
 
 
 def get_class_student_by_ids(
     db: Session, class_id: int, student_user_id: int
-) -> Optional[ClassStudent]:
+) -> Optional[ClassStudentOut]:
     db_class_student = class_student_repo.get_class_student_by_ids(
         db, class_id, student_user_id
     )

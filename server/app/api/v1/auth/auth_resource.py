@@ -53,7 +53,7 @@ def logout(
 
     print(session_token)
 
-    user_id = auth_service.logout_user(db=db, session_id=session_token)
+    auth_service.logout_user(db=db, session_id=session_token)
 
     response.delete_cookie(
         key="session_token",
@@ -63,4 +63,4 @@ def logout(
         # domain="localhost",
     )
 
-    return {"user_id": user_id}
+    return Response(status_code=status.HTTP_201_CREATED)

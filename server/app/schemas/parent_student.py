@@ -12,12 +12,11 @@ class ParentStudentCreate(ParentStudentBase):
     pass
 
 
-class ParentStudentUpdate(BaseModel):
+class ParentStudentUpdate(ParentStudentBase):
     parent_user_id: Optional[int] = None
     student_user_id: Optional[int] = None
 
 
 class ParentStudentOut(ParentStudentBase):
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+    model_config = {"from_attributes": True}

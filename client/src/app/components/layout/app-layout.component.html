@@ -38,6 +38,17 @@
         <button class="header-trigger" (click)="isCollapsed = !isCollapsed">
           <nz-icon class="trigger" [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'" />
         </button>
+        <div class="header-right">
+          <a nz-dropdown [nzDropdownMenu]="menu" class="profile-trigger">
+            <nz-avatar nzIcon="user"></nz-avatar>
+          </a>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li routerLink="/profile" nz-menu-item>Profile</li>
+              <li (click)="logout()" nz-menu-item nzDanger>Log out</li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
       </div>
     </nz-header>
     <nz-content>

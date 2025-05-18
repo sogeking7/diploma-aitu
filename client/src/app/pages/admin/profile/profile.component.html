@@ -1,0 +1,43 @@
+<div class="profile-container">
+  <nz-card class="profile-card">
+    <div class="profile-header">
+      <nz-avatar [nzSize]="100" nzIcon="user" class="profile-avatar"> </nz-avatar>
+      <h2 class="profile-name">{{ user?.first_name }} {{ user?.last_name }}</h2>
+    </div>
+
+    <nz-descriptions nzTitle="User Information" nzBordered [nzColumn]="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }">
+      <nz-descriptions-item nzTitle="First Name">
+        {{ user?.first_name }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Last Name">
+        {{ user?.last_name }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email">
+        {{ user?.email }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Role">
+        {{ user?.role }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="ID">
+        {{ user?.id }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <div class="profile-actions">
+      <button nz-button nzType="primary" (click)="showEditModal()" (keydown.enter)="showEditModal()" (keydown.space)="showEditModal()">
+        <span nz-icon nzType="edit"></span>
+        Edit Profile
+      </button>
+      <button
+        nz-button
+        nzType="default"
+        nzDanger
+        (click)="showChangePasswordModal()"
+        (keydown.enter)="showChangePasswordModal()"
+        (keydown.space)="showChangePasswordModal()">
+        <span nz-icon nzType="lock"></span>
+        Change Password
+      </button>
+    </div>
+  </nz-card>
+</div>

@@ -16,8 +16,8 @@ def get_class(db: Session, class_id: int) -> Optional[ClassOut]:
     return db_class
 
 
-def get_classes(db: Session, skip: int = 0, limit: int = 100) -> Page[ClassOut]:
-    return class_repo.get_classes(db, skip=skip, limit=limit)
+def get_classes(db: Session) -> Page[ClassOut]:
+    return class_repo.get_classes(db)
 
 
 def get_classes_by_teacher(db: Session, teacher_user_id: int) -> Page[ClassOut]:

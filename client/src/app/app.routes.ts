@@ -26,6 +26,10 @@ export const routes: Routes = [
         path: 'classes',
         loadChildren: () => import('./pages/admin/classes/classes.routes').then(m => m.CLASSES_ROUTES),
       },
+      {
+        path: 'profile',
+        loadChildren: () => import('./pages/admin/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+      },
     ],
   },
   {

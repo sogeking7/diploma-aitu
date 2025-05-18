@@ -12,12 +12,11 @@ class ClassStudentCreate(ClassStudentBase):
     pass
 
 
-class ClassStudentUpdate(BaseModel):
+class ClassStudentUpdate(ClassStudentBase):
     class_id: Optional[int] = None
     student_user_id: Optional[int] = None
 
 
 class ClassStudentOut(ClassStudentBase):
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+    model_config = {"from_attributes": True}

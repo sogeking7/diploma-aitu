@@ -13,11 +13,12 @@ class AttendanceCreate(AttendanceBase):
     pass
 
 
-class AttendanceUpdate(BaseModel):
+class AttendanceUpdate(AttendanceBase):
+    student_user_id: Optional[int] = None
+    time_in: Optional[datetime] = None
     time_out: Optional[datetime] = None
 
 
 class AttendanceOut(AttendanceBase):
     id: int
-    created_at: datetime
-    updated_at: Optional[datetime] = None
+    model_config = {"from_attributes": True}

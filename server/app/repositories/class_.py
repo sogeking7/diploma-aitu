@@ -15,8 +15,8 @@ def get_class(db: Session, class_id: int) -> Optional[ClassOut]:
     return get_active_classes(db).filter_by(id=class_id).first()
 
 
-def get_classes(db: Session, skip: int = 0, limit: int = 100) -> Page[ClassOut]:
-    return paginate(db, get_active_classes(db).offset(skip).limit(limit))
+def get_classes(db: Session) -> Page[ClassOut]:
+    return paginate(db, get_active_classes(db))
 
 
 def get_classes_by_teacher(db: Session, teacher_user_id: int) -> Page[ClassOut]:

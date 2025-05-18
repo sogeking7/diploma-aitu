@@ -74,14 +74,6 @@ nz-header {
   z-index: 2;
 }
 
-.app-header {
-  position: relative;
-  height: 64px;
-  padding: 0;
-  background: #fff;
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-}
-
 nz-content {
   margin: 24px;
 }
@@ -90,4 +82,32 @@ nz-content {
   padding: 24px;
   background: #fff;
   height: 100%;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.profile-trigger {
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.profile-trigger:hover {
+  color: #1890ff;
 }

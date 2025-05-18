@@ -17,6 +17,10 @@ export class AuthenticationService {
     return this.authService.login(username, password).pipe();
   }
 
+  logout() {
+    return this.authService.logout().pipe();
+  }
+
   async isAuthenticated() {
     try {
       this.user = await lastValueFrom(this.userService.readCurrentUser());
@@ -27,6 +31,4 @@ export class AuthenticationService {
       return false;
     }
   }
-
-  async logout() {}
 }

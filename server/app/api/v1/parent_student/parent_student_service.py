@@ -1,13 +1,13 @@
 from fastapi import HTTPException, status
-from typing import Optional, List
+from typing import Optional
 from sqlalchemy.orm import Session
+from fastapi_pagination import Page
 
-from app.models.parent_student import ParentStudent
-from app.schemas.parent_student import ParentStudentCreate, ParentStudentUpdate
+from app.schemas.parent_student import ParentStudentCreate, ParentStudentUpdate, ParentStudentOut
 from app.repositories import parent_student as parent_student_repo
 
 
-def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentStudent]:
+def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentStudentOut]:
     db_parent_student = parent_student_repo.get_parent_student(
         db, parent_student_id=parent_student_id
     )
@@ -19,16 +19,16 @@ def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentSt
 
 
 def get_parent_students(
-    db: Session, skip: int = 0, limit: int = 100
-) -> List[ParentStudent]:
-    return parent_student_repo.get_parent_students(db, skip=skip, limit=limit)
+    db: Session
+) -> Page[ParentStudentOut]:
+    return parent_student_repo.get_parent_students(db)
 
 
-def get_students_by_parent(db: Session, parent_user_id: int) -> List[ParentStudent]:
+def get_students_by_parent(db: Session, parent_user_id: int) -> Page[ParentStudentOut]:
     return parent_student_repo.get_students_by_parent(db, parent_user_id=parent_user_id)
 
 
-def get_parents_by_student(db: Session, student_user_id: int) -> List[ParentStudent]:
+def get_parents_by_student(db: Session, student_user_id: int) -> Page[ParentStudentOut]:
     return parent_student_repo.get_parents_by_student(
         db, student_user_id=student_user_id
     )
@@ -36,7 +36,7 @@ def get_parents_by_student(db: Session, student_user_id: int) -> List[ParentStud
 
 def create_parent_student(
     db: Session, parent_student_in: ParentStudentCreate
-) -> ParentStudent:
+) -> ParentStudentOut:
     try:
         return parent_student_repo.insert_parent_student(db, parent_student_in)
     except ValueError as e:
@@ -45,7 +45,7 @@ def create_parent_student(
 
 def update_parent_student(
     db: Session, parent_student_id: int, parent_student_in: ParentStudentUpdate
-) -> ParentStudent:
+) -> ParentStudentOut:
     try:
         return parent_student_repo.update_parent_student(
             db, parent_student_id, parent_student_in
@@ -55,19 +55,18 @@ def update_parent_student(
 
 
 def delete_parent_student(db: Session, parent_student_id: int) -> None:
-    db_parent_student = parent_student_repo.get_parent_student(db, parent_student_id)
-    if not db_parent_student:
+    try:
+        parent_student_repo.soft_delete_parent_student(db, parent_student_id)
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Parent-Student relationship with id {parent_student_id} not found",
+            detail=str(e),
         )
-
-    parent_student_repo.soft_delete_parent_student(db, db_parent_student)
 
 
 def get_parent_student_by_ids(
     db: Session, parent_user_id: int, student_user_id: int
-) -> Optional[ParentStudent]:
+) -> Optional[ParentStudentOut]:
     db_parent_student = parent_student_repo.get_parent_student_by_ids(
         db, parent_user_id, student_user_id
     )
