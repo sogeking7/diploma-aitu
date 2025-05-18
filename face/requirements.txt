@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+facenet-pytorch
+Pillow
+numpy==1.26.4
+python-multipart
+torch
+torchvision
+faiss-cpu
+python-dotenv
