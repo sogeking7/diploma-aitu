@@ -19,6 +19,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { HTTPValidationError } from '../model/http-validation-error';
 // @ts-ignore
+import { PageParentStudentOut } from '../model/page-parent-student-out';
+// @ts-ignore
 import { ParentStudentCreate } from '../model/parent-student-create';
 // @ts-ignore
 import { ParentStudentOut } from '../model/parent-student-out';
@@ -224,21 +226,21 @@ export class ParentStudentsService extends BaseService {
 
     /**
      * Read Parent Students
-     * @param skip 
-     * @param limit 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readParentStudents(skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ParentStudentOut>>;
-    public readParentStudents(skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ParentStudentOut>>>;
-    public readParentStudents(skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ParentStudentOut>>>;
-    public readParentStudents(skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readParentStudents(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageParentStudentOut>;
+    public readParentStudents(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageParentStudentOut>>;
+    public readParentStudents(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageParentStudentOut>>;
+    public readParentStudents(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
+          <any>page, 'page');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -270,7 +272,7 @@ export class ParentStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/parent-students/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ParentStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageParentStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -287,16 +289,24 @@ export class ParentStudentsService extends BaseService {
     /**
      * Read Parents By Student
      * @param studentId 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readParentsByStudent(studentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ParentStudentOut>>;
-    public readParentsByStudent(studentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ParentStudentOut>>>;
-    public readParentsByStudent(studentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ParentStudentOut>>>;
-    public readParentsByStudent(studentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readParentsByStudent(studentId: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageParentStudentOut>;
+    public readParentsByStudent(studentId: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageParentStudentOut>>;
+    public readParentsByStudent(studentId: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageParentStudentOut>>;
+    public readParentsByStudent(studentId: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (studentId === null || studentId === undefined) {
             throw new Error('Required parameter studentId was null or undefined when calling readParentsByStudent.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -328,9 +338,10 @@ export class ParentStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/parent-students/student/${this.configuration.encodeParam({name: "studentId", value: studentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ParentStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageParentStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -344,16 +355,24 @@ export class ParentStudentsService extends BaseService {
     /**
      * Read Students By Parent
      * @param parentId 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readStudentsByParent(parentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ParentStudentOut>>;
-    public readStudentsByParent(parentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ParentStudentOut>>>;
-    public readStudentsByParent(parentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ParentStudentOut>>>;
-    public readStudentsByParent(parentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readStudentsByParent(parentId: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageParentStudentOut>;
+    public readStudentsByParent(parentId: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageParentStudentOut>>;
+    public readStudentsByParent(parentId: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageParentStudentOut>>;
+    public readStudentsByParent(parentId: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (parentId === null || parentId === undefined) {
             throw new Error('Required parameter parentId was null or undefined when calling readStudentsByParent.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -385,9 +404,10 @@ export class ParentStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/parent-students/parent/${this.configuration.encodeParam({name: "parentId", value: parentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ParentStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageParentStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

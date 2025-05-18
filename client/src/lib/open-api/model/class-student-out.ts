@@ -13,7 +13,5 @@ export interface ClassStudentOut {
     class_id: number;
     student_user_id: number;
     id: number;
-    created_at: string;
-    updated_at?: string | null;
 }
 

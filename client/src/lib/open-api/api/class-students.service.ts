@@ -24,6 +24,8 @@ import { ClassStudentOut } from '../model/class-student-out';
 import { ClassStudentUpdate } from '../model/class-student-update';
 // @ts-ignore
 import { HTTPValidationError } from '../model/http-validation-error';
+// @ts-ignore
+import { PageClassStudentOut } from '../model/page-class-student-out';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -224,21 +226,21 @@ export class ClassStudentsService extends BaseService {
 
     /**
      * Read Class Students
-     * @param skip 
-     * @param limit 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readClassStudents(skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ClassStudentOut>>;
-    public readClassStudents(skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ClassStudentOut>>>;
-    public readClassStudents(skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ClassStudentOut>>>;
-    public readClassStudents(skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readClassStudents(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageClassStudentOut>;
+    public readClassStudents(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageClassStudentOut>>;
+    public readClassStudents(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageClassStudentOut>>;
+    public readClassStudents(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
+          <any>page, 'page');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -270,7 +272,7 @@ export class ClassStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/class-students/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ClassStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageClassStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -287,16 +289,24 @@ export class ClassStudentsService extends BaseService {
     /**
      * Read Classes By Student
      * @param studentId 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readClassesByStudent(studentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ClassStudentOut>>;
-    public readClassesByStudent(studentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ClassStudentOut>>>;
-    public readClassesByStudent(studentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ClassStudentOut>>>;
-    public readClassesByStudent(studentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readClassesByStudent(studentId: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageClassStudentOut>;
+    public readClassesByStudent(studentId: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageClassStudentOut>>;
+    public readClassesByStudent(studentId: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageClassStudentOut>>;
+    public readClassesByStudent(studentId: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (studentId === null || studentId === undefined) {
             throw new Error('Required parameter studentId was null or undefined when calling readClassesByStudent.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -328,9 +338,10 @@ export class ClassStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/class-students/student/${this.configuration.encodeParam({name: "studentId", value: studentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ClassStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageClassStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -344,16 +355,24 @@ export class ClassStudentsService extends BaseService {
     /**
      * Read Students By Class
      * @param classId 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readStudentsByClass(classId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<ClassStudentOut>>;
-    public readStudentsByClass(classId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<ClassStudentOut>>>;
-    public readStudentsByClass(classId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<ClassStudentOut>>>;
-    public readStudentsByClass(classId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readStudentsByClass(classId: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageClassStudentOut>;
+    public readStudentsByClass(classId: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageClassStudentOut>>;
+    public readStudentsByClass(classId: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageClassStudentOut>>;
+    public readStudentsByClass(classId: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (classId === null || classId === undefined) {
             throw new Error('Required parameter classId was null or undefined when calling readStudentsByClass.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -385,9 +404,10 @@ export class ClassStudentsService extends BaseService {
 
         let localVarPath = `/api/v1/class-students/class/${this.configuration.encodeParam({name: "classId", value: classId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<ClassStudentOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageClassStudentOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

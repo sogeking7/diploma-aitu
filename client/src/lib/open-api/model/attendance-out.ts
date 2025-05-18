@@ -14,7 +14,5 @@ export interface AttendanceOut {
     time_in: string;
     time_out?: string | null;
     id: number;
-    created_at: string;
-    updated_at?: string | null;
 }
 

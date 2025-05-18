@@ -24,6 +24,8 @@ import { AttendanceOut } from '../model/attendance-out';
 import { AttendanceUpdate } from '../model/attendance-update';
 // @ts-ignore
 import { HTTPValidationError } from '../model/http-validation-error';
+// @ts-ignore
+import { PageAttendanceOut } from '../model/page-attendance-out';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -224,21 +226,21 @@ export class AttendancesService extends BaseService {
 
     /**
      * Read Attendances
-     * @param skip 
-     * @param limit 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readAttendances(skip?: number, limit?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AttendanceOut>>;
-    public readAttendances(skip?: number, limit?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AttendanceOut>>>;
-    public readAttendances(skip?: number, limit?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AttendanceOut>>>;
-    public readAttendances(skip?: number, limit?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readAttendances(page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAttendanceOut>;
+    public readAttendances(page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAttendanceOut>>;
+    public readAttendances(page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAttendanceOut>>;
+    public readAttendances(page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>skip, 'skip');
+          <any>page, 'page');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-          <any>limit, 'limit');
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -270,7 +272,7 @@ export class AttendancesService extends BaseService {
 
         let localVarPath = `/api/v1/attendances/`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<AttendanceOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageAttendanceOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -288,13 +290,15 @@ export class AttendancesService extends BaseService {
      * Read Attendances By Date Range
      * @param startDate Start date for attendance records
      * @param endDate End date for attendance records
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readAttendancesByDateRange(startDate: string, endDate: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AttendanceOut>>;
-    public readAttendancesByDateRange(startDate: string, endDate: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AttendanceOut>>>;
-    public readAttendancesByDateRange(startDate: string, endDate: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AttendanceOut>>>;
-    public readAttendancesByDateRange(startDate: string, endDate: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readAttendancesByDateRange(startDate: string, endDate: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAttendanceOut>;
+    public readAttendancesByDateRange(startDate: string, endDate: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAttendanceOut>>;
+    public readAttendancesByDateRange(startDate: string, endDate: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAttendanceOut>>;
+    public readAttendancesByDateRange(startDate: string, endDate: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (startDate === null || startDate === undefined) {
             throw new Error('Required parameter startDate was null or undefined when calling readAttendancesByDateRange.');
         }
@@ -307,6 +311,10 @@ export class AttendancesService extends BaseService {
           <any>startDate, 'start_date');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>endDate, 'end_date');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -338,7 +346,7 @@ export class AttendancesService extends BaseService {
 
         let localVarPath = `/api/v1/attendances/date-range`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<AttendanceOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageAttendanceOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 params: localVarQueryParameters,
@@ -355,16 +363,24 @@ export class AttendancesService extends BaseService {
     /**
      * Read Attendances By Student
      * @param studentId 
+     * @param page Page number
+     * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readAttendancesByStudent(studentId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<AttendanceOut>>;
-    public readAttendancesByStudent(studentId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<AttendanceOut>>>;
-    public readAttendancesByStudent(studentId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<AttendanceOut>>>;
-    public readAttendancesByStudent(studentId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readAttendancesByStudent(studentId: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAttendanceOut>;
+    public readAttendancesByStudent(studentId: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAttendanceOut>>;
+    public readAttendancesByStudent(studentId: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAttendanceOut>>;
+    public readAttendancesByStudent(studentId: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (studentId === null || studentId === undefined) {
             throw new Error('Required parameter studentId was null or undefined when calling readAttendancesByStudent.');
         }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -396,9 +412,10 @@ export class AttendancesService extends BaseService {
 
         let localVarPath = `/api/v1/attendances/student/${this.configuration.encodeParam({name: "studentId", value: studentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<AttendanceOut>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PageAttendanceOut>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

@@ -10,6 +10,8 @@
 
 
 export interface AttendanceUpdate { 
+    student_user_id?: number | null;
+    time_in?: string | null;
     time_out?: string | null;
 }
 
