@@ -8,3 +8,4 @@ torch
 torchvision
 faiss-cpu
 python-dotenv
+pydantic_settings

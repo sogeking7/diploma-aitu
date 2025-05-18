@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     DEFAULT_TOP_K: int = int(os.getenv("DEFAULT_TOP_K", "1"))
 
     # Performance settings
-    MAX_WORKERS: int = int(os.getenv("MAX_WORKERS", "4"))
+    MAX_WORKERS: int = int(os.getenv("MAX_WORKERS", "1"))
 
     # FAISS settings
     FAISS_INDEX_TYPE: str = os.getenv("FAISS_INDEX_TYPE", "flat")  # flat, ivf, ivfpq, hnsw
