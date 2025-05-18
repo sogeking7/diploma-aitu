@@ -18,6 +18,7 @@ export * from './parent-student-out';
 export * from './parent-student-update';
 export * from './role-enum';
 export * from './token-model';
+export * from './user-base';
 export * from './user-create';
 export * from './user-out';
 export * from './user-update';

@@ -7,13 +7,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserBase } from './user-base';
 
 
-export interface ClassOut { 
-    name: string;
-    teacher_user_id: number;
+export interface UserBase { 
+    first_name: string;
+    last_name: string;
+    email: string;
     id: number;
-    teacher_user: UserBase;
 }
 

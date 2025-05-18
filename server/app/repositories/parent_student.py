@@ -6,28 +6,36 @@ from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app.models.parent_student import ParentStudent
-from app.schemas.parent_student import ParentStudentCreate, ParentStudentUpdate, ParentStudentOut
+from app.schemas.parent_student import (
+    ParentStudentCreate,
+    ParentStudentUpdate,
+    ParentStudentOut,
+)
 
 
 def get_active_parent_students(db: Session):
     return db.query(ParentStudent).filter_by(deleted=False)
 
 
-def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentStudentOut]:
-    db_parent_student = get_active_parent_students(db).filter_by(id=parent_student_id).first()
+def get_parent_student(
+    db: Session, parent_student_id: int
+) -> Optional[ParentStudentOut]:
+    db_parent_student = (
+        get_active_parent_students(db).filter_by(id=parent_student_id).first()
+    )
     if db_parent_student:
         return ParentStudentOut.model_validate(db_parent_student)
     return None
 
 
-def get_parent_students(
-    db: Session
-) -> Page[ParentStudentOut]:
+def get_parent_students(db: Session) -> Page[ParentStudentOut]:
     return paginate(db, get_active_parent_students(db))
 
 
 def get_students_by_parent(db: Session, parent_user_id: int) -> Page[ParentStudentOut]:
-    return paginate(db, get_active_parent_students(db).filter_by(parent_user_id=parent_user_id))
+    return paginate(
+        db, get_active_parent_students(db).filter_by(parent_user_id=parent_user_id)
+    )
 
 
 def get_parents_by_student(db: Session, student_user_id: int) -> Page[ParentStudentOut]:
@@ -69,7 +77,9 @@ def insert_parent_student(
 def update_parent_student(
     db: Session, parent_student_id: int, parent_student_in: ParentStudentUpdate
 ) -> ParentStudentOut:
-    db_parent_student = get_active_parent_students(db).filter_by(id=parent_student_id).first()
+    db_parent_student = (
+        get_active_parent_students(db).filter_by(id=parent_student_id).first()
+    )
     if not db_parent_student:
         raise ValueError(
             f"Parent-Student relationship with id {parent_student_id} not found"
@@ -89,8 +99,12 @@ def update_parent_student(
 
 
 def soft_delete_parent_student(db: Session, parent_student_id: int) -> None:
-    parent_student = get_active_parent_students(db).filter_by(id=parent_student_id).first()
+    parent_student = (
+        get_active_parent_students(db).filter_by(id=parent_student_id).first()
+    )
     if not parent_student:
-        raise ValueError(f"Parent-Student relationship with id {parent_student_id} not found")
+        raise ValueError(
+            f"Parent-Student relationship with id {parent_student_id} not found"
+        )
     parent_student.deleted = True
     db.commit()

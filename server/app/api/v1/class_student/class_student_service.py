@@ -3,7 +3,11 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi_pagination import Page
 
-from app.schemas.class_student import ClassStudentCreate, ClassStudentUpdate, ClassStudentOut
+from app.schemas.class_student import (
+    ClassStudentCreate,
+    ClassStudentUpdate,
+    ClassStudentOut,
+)
 from app.repositories import class_student as class_student_repo
 
 
@@ -18,9 +22,7 @@ def get_class_student(db: Session, class_student_id: int) -> Optional[ClassStude
     return db_class_student
 
 
-def get_class_students(
-    db: Session
-) -> Page[ClassStudentOut]:
+def get_class_students(db: Session) -> Page[ClassStudentOut]:
     return class_student_repo.get_class_students(db)
 
 

@@ -3,11 +3,17 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from fastapi_pagination import Page
 
-from app.schemas.parent_student import ParentStudentCreate, ParentStudentUpdate, ParentStudentOut
+from app.schemas.parent_student import (
+    ParentStudentCreate,
+    ParentStudentUpdate,
+    ParentStudentOut,
+)
 from app.repositories import parent_student as parent_student_repo
 
 
-def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentStudentOut]:
+def get_parent_student(
+    db: Session, parent_student_id: int
+) -> Optional[ParentStudentOut]:
     db_parent_student = parent_student_repo.get_parent_student(
         db, parent_student_id=parent_student_id
     )
@@ -18,9 +24,7 @@ def get_parent_student(db: Session, parent_student_id: int) -> Optional[ParentSt
     return db_parent_student
 
 
-def get_parent_students(
-    db: Session
-) -> Page[ParentStudentOut]:
+def get_parent_students(db: Session) -> Page[ParentStudentOut]:
     return parent_student_repo.get_parent_students(db)
 
 

@@ -36,11 +36,4 @@ def update_class(db: Session, class_id: int, class_in: ClassUpdate) -> ClassOut:
 
 
 def delete_class(db: Session, class_id: int) -> None:
-    db_class = class_repo.get_class(db, class_id)
-    if not db_class:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Class with id {class_id} not found",
-        )
-
-    class_repo.soft_delete_class(db, db_class)
+    class_repo.soft_delete_class(db, class_id)

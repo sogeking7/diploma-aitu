@@ -1,0 +1,40 @@
+<div class="page-header" style="margin-bottom: 16px">
+  <button nz-button (click)="goBack()"><i nz-icon nzType="arrow-left"></i> Back</button>
+</div>
+
+<nz-card>
+  <form nz-form [formGroup]="classForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Class Name</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input class name!">
+        <input nz-input formControlName="name" placeholder="Class Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Teacher</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please select a teacher!">
+        <nz-select
+          formControlName="teacher_user_id"
+          nzShowSearch
+          nzServerSearch
+          nzAllowClear
+          nzPlaceHolder="Search for teacher"
+          [nzShowArrow]="false"
+          [nzFilterOption]="nzFilterOption"
+          (nzOnSearch)="searchTeachers($event)">
+          <nz-option *ngFor="let teacher of teacherSearchResults" [nzValue]="teacher.id" [nzLabel]="getTeacherDisplayName(teacher)">
+            <nz-icon nzType="user" nzTheme="outline" />
+          </nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzOffset]="6" [nzSpan]="14">
+        <button nz-button nzType="primary" [disabled]="!classForm.valid || isSubmitting">Create Class</button>
+        <button nz-button nzType="default" (click)="cancelCreate()" style="margin-left: 8px">Cancel</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>

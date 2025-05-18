@@ -6,7 +6,7 @@ from pydantic import EmailStr
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate, UserOut
+from app.schemas.user import UserCreate, UserUpdate, UserOut, RoleEnum
 from app.repositories import user as user_repo
 
 
@@ -17,8 +17,8 @@ def get_user(db: Session, user_id: int) -> Optional[User]:
     return user_repo.get_user(db, user_id)
 
 
-def get_users(db: Session) -> Page[UserOut]:
-    return user_repo.get_users(db)
+def get_users(db: Session, role: Optional[RoleEnum] = None) -> Page[UserOut]:
+    return user_repo.get_users(db, role=role)
 
 
 def create_user(db: Session, user_in: UserCreate) -> UserOut:

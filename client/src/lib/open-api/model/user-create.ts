@@ -15,6 +15,7 @@ export interface UserCreate {
     last_name: string;
     email: string;
     role: RoleEnum;
+    password: string;
 }
 export namespace UserCreate {
 }

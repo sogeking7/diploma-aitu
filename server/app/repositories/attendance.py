@@ -20,7 +20,9 @@ def get_attendances(db: Session) -> Page[AttendanceOut]:
     return paginate(db, get_active_attendances(db))
 
 
-def get_attendances_by_student(db: Session, student_user_id: int) -> Page[AttendanceOut]:
+def get_attendances_by_student(
+    db: Session, student_user_id: int
+) -> Page[AttendanceOut]:
     return paginate(
         db, get_active_attendances(db).filter_by(student_user_id=student_user_id)
     )

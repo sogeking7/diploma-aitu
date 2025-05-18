@@ -1,18 +1,24 @@
 from typing import Optional
 
 from fastapi_pagination import Page
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from app.models.class_ import Class
+from app.models.user import User
 from app.schemas.class_ import ClassCreate, ClassUpdate, ClassOut
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 
 def get_active_classes(db: Session):
-    return db.query(Class).filter_by(deleted=False)
+    return (
+        db.query(Class)
+        .join(User, Class.teacher_user_id == User.id)
+        .filter(Class.deleted == False)
+        .options(joinedload(Class.teacher_user))
+    )
 
 
 def get_class(db: Session, class_id: int) -> Optional[ClassOut]:
-    return get_active_classes(db).filter_by(id=class_id).first()
+    return get_active_classes(db).filter(Class.id == class_id).first()
 
 
 def get_classes(db: Session) -> Page[ClassOut]:
@@ -37,7 +43,7 @@ def insert_class(db: Session, class_in: ClassCreate) -> ClassOut:
 
 
 def update_class(db: Session, class_id: int, class_in: ClassUpdate) -> ClassOut:
-    db_class = get_active_classes(db).filter_by(id=class_id).first()
+    db_class = get_active_classes(db).filter(Class.id == class_id).first()
     if not db_class:
         raise ValueError(f"Class {class_id} not found")
 
@@ -51,7 +57,7 @@ def update_class(db: Session, class_id: int, class_in: ClassUpdate) -> ClassOut:
 
 
 def soft_delete_class(db: Session, class_id: int) -> None:
-    class_ = get_active_classes(db).filter_by(id=class_id).first()
+    class_ = get_active_classes(db).filter(Class.id == class_id).first()
     if not class_:
         raise ValueError(f"Class {class_id} not found")
     class_.deleted = True

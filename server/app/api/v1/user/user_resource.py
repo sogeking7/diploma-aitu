@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
+from typing import Optional
 
 from app.api.dependencies import get_db, get_current_user
 from app.models.user import User
-from app.schemas.user import UserOut, UserCreate, UserUpdate
+from app.schemas.user import UserOut, UserCreate, UserUpdate, RoleEnum
 from app.api.v1.user import user_service
 
 from fastapi_pagination import Page
@@ -39,8 +40,14 @@ def update_user(
 def read_users(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    role: Optional[RoleEnum] = None,
 ):
-    return user_service.get_users(db)
+    """
+    Get all users, optionally filtered by role.
+
+    - **role**: Filter users by role. Valid values are RoleEnum members (ADMIN, TEACHER, STUDENT, PARENT).
+    """
+    return user_service.get_users(db, role=role)
 
 
 @router.get("/{user_id}", response_model=UserOut)

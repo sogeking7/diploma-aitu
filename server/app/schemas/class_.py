@@ -16,6 +16,16 @@ class ClassUpdate(BaseModel):
     teacher_user_id: Optional[int] = None
 
 
+class UserBase(BaseModel):
+    first_name: str
+    last_name: str
+    email: str
+    id: int
+    model_config = {"from_attributes": True}
+
+
 class ClassOut(ClassBase):
     id: int
+    name: str
+    teacher_user: UserBase
     model_config = {"from_attributes": True}

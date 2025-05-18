@@ -6,7 +6,11 @@ from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 
 from app.models.class_student import ClassStudent
-from app.schemas.class_student import ClassStudentCreate, ClassStudentUpdate, ClassStudentOut
+from app.schemas.class_student import (
+    ClassStudentCreate,
+    ClassStudentUpdate,
+    ClassStudentOut,
+)
 
 
 def get_active_class_students(db: Session):
@@ -14,15 +18,15 @@ def get_active_class_students(db: Session):
 
 
 def get_class_student(db: Session, class_student_id: int) -> Optional[ClassStudentOut]:
-    db_class_student = get_active_class_students(db).filter_by(id=class_student_id).first()
+    db_class_student = (
+        get_active_class_students(db).filter_by(id=class_student_id).first()
+    )
     if db_class_student:
         return ClassStudentOut.model_validate(db_class_student)
     return None
 
 
-def get_class_students(
-    db: Session
-) -> Page[ClassStudentOut]:
+def get_class_students(db: Session) -> Page[ClassStudentOut]:
     return paginate(db, get_active_class_students(db))
 
 
@@ -69,7 +73,9 @@ def insert_class_student(
 def update_class_student(
     db: Session, class_student_id: int, class_student_in: ClassStudentUpdate
 ) -> ClassStudentOut:
-    db_class_student = get_active_class_students(db).filter_by(id=class_student_id).first()
+    db_class_student = (
+        get_active_class_students(db).filter_by(id=class_student_id).first()
+    )
     if not db_class_student:
         raise ValueError(
             f"Class-Student relationship with id {class_student_id} not found"
@@ -91,6 +97,8 @@ def update_class_student(
 def soft_delete_class_student(db: Session, class_student_id: int) -> None:
     class_student = get_active_class_students(db).filter_by(id=class_student_id).first()
     if not class_student:
-        raise ValueError(f"Class-Student relationship with id {class_student_id} not found")
+        raise ValueError(
+            f"Class-Student relationship with id {class_student_id} not found"
+        )
     class_student.deleted = True
     db.commit()
