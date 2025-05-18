@@ -1,0 +1,40 @@
+<nz-table
+  #attendanceTable
+  [nzFrontPagination]="false"
+  [nzData]="attendances"
+  nzBordered
+  nzShowPagination
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzPageIndex]="page"
+  [nzPageSize]="count"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Student ID</th>
+      <th>Time in</th>
+      <th>Time out</th>
+<!--      <th>Status</th>-->
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let a of attendanceTable.data">
+      <td>{{ a.id }}</td>
+      <td>{{ a.student_user_id }}</td>
+      <td>{{ a.time_in }}</td>
+      <td>{{ a.time_out }}</td>
+<!--      <td>-->
+<!--        <nz-tag [nzColor]="a.status === 'present' ? 'green' : 'red'">-->
+<!--          {{ a.status }}-->
+<!--        </nz-tag>-->
+<!--      </td>-->
+      <td>
+        <button nz-button nzType="link">View</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
