@@ -6,6 +6,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { AuthenticationService } from '../../services/auth.service';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-layout',
@@ -25,6 +26,7 @@ import { AuthenticationService } from '../../services/auth.service';
     RouterOutlet,
     NzAvatarModule,
     NzDropDownModule,
+    NzTypographyModule,
   ],
 })
 export class AppLayoutComponent {

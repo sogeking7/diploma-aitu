@@ -1,5 +1,8 @@
 <div class="login-container">
   <nz-card [nzBordered]="false" class="login-card">
+    <div class="logo-wrapper">
+      <img src="/logo.svg" alt="logo"  />
+    </div>
     <h2 class="login-title">Clockster</h2>
     <p class="login-subtitle">Sign in to your account</p>
 
@@ -24,7 +27,7 @@
 
       <nz-form-item>
         <nz-form-control>
-          <nz-checkbox nz-checkbox formControlName="remember">Remember me</nz-checkbox>
+          <label nz-checkbox formControlName="remember">Remember me</label>
         </nz-form-control>
       </nz-form-item>
 

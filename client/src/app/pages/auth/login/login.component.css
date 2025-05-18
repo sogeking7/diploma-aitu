@@ -40,3 +40,9 @@
 .login-form-forgot {
   float: right;
 }
+
+.logo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
