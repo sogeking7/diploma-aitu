@@ -17,8 +17,8 @@ export class UsersComponent implements OnInit {
   users: UserOut[] = [];
 
   loading = true;
-  pageIndex = 1;
-  pageSize = 10;
+  page = 1;
+  count = 10;
   total = 0;
 
   constructor(
@@ -29,27 +29,27 @@ export class UsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const pageIndexFromUrl = params['pageIndex'];
-      const pageSizeFromUrl = params['pageSize'];
+      const pageFromUrl = params['page'];
+      const countFromUrl = params['count'];
 
-      this.pageIndex = pageIndexFromUrl ? +pageIndexFromUrl : 1;
-      this.pageSize = pageSizeFromUrl ? +pageSizeFromUrl : 10;
+      this.page = pageFromUrl ? +pageFromUrl : 1;
+      this.count = countFromUrl ? +countFromUrl : 10;
 
       this.loadUsers();
     });
   }
 
   searchData(reset: boolean = false): void {
-    let targetPageIndex = this.pageIndex;
+    let targetPage = this.page;
     if (reset) {
-      targetPageIndex = 1;
+      targetPage = 1;
     }
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        pageIndex: targetPageIndex,
-        pageSize: this.pageSize,
+        page: targetPage,
+        count: this.count,
       },
       queryParamsHandling: 'merge',
     });
@@ -57,7 +57,7 @@ export class UsersComponent implements OnInit {
 
   private loadUsers(): void {
     this.loading = true;
-    this.usersService.readUsers(this.pageIndex, this.pageSize).subscribe(list => {
+    this.usersService.readUsers(this.page, this.count).subscribe(list => {
       this.loading = false;
       this.total = Number(list.total);
       this.users = list.items;
@@ -65,13 +65,13 @@ export class UsersComponent implements OnInit {
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex } = params;
+    const { pageIndex, pageSize } = params;
 
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        pageIndex: pageIndex,
-        pageSize: pageSize,
+        page: pageIndex,
+        count: pageSize,
       },
       queryParamsHandling: 'merge',
     });
