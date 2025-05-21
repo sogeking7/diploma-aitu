@@ -7,12 +7,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { RoleEnum } from './role-enum';
 
 
-export interface UserBase { 
+export interface AppSchemasUserUserBase { 
     first_name: string;
     last_name: string;
     email: string;
-    id: number;
+    role: RoleEnum;
 }
+export namespace AppSchemasUserUserBase {
+}
+
 
