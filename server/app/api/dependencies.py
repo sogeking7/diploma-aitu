@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Optional
 from fastapi import Depends, HTTPException, status, Cookie, Request, Header
 from sqlalchemy.orm import Session
@@ -20,6 +21,16 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@lru_cache()
+def get_face_db():
+    return FaceDatabase()
+
+
+@lru_cache()
+def get_face_detector():
+    return FaceDetector()
 
 
 def get_token_from_request(

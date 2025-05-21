@@ -1,22 +1,23 @@
 import time
 
-from fastapi import APIRouter, File, UploadFile, Form, HTTPException
+from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Depends
 from PIL import Image
 import io
 import numpy as np
 
-from app.services.face_db import FaceDatabase
+from app.api.dependencies import get_face_detector, get_face_db
 from app.services.face_detector import FaceDetector
+from app.services.face_db import FaceDatabase
 
 router = APIRouter()
 
-# Initialize services
-face_detector = FaceDetector()
-face_db = FaceDatabase()
-
 
 @router.post("/verify")
-async def verify_faces(img1: UploadFile = File(...), img2: UploadFile = File(...)):
+async def verify_faces(
+    img1: UploadFile = File(...),
+    img2: UploadFile = File(...),
+    face_detector: FaceDetector = Depends(get_face_detector),
+):
     try:
         img1_pil = Image.open(io.BytesIO(await img1.read())).convert("RGB")
         img2_pil = Image.open(io.BytesIO(await img2.read())).convert("RGB")
@@ -40,7 +41,11 @@ async def verify_faces(img1: UploadFile = File(...), img2: UploadFile = File(...
 
 @router.post("/add_face")
 async def add_face(
-    face_id: str = Form(...), name: str = Form(...), image: UploadFile = File(...)
+    face_id: str = Form(...),
+    name: str = Form(...),
+    image: UploadFile = File(...),
+    face_detector: FaceDetector = Depends(get_face_detector),
+    face_db: FaceDatabase = Depends(get_face_db),
 ):
     try:
         img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
@@ -69,7 +74,11 @@ async def add_face(
 
 @router.post("/search_face")
 async def search_face(
-    image: UploadFile = File(...), threshold: float = Form(0.8), k: int = Form(1)
+    image: UploadFile = File(...),
+    threshold: float = Form(0.8),
+    k: int = Form(1),
+    face_detector: FaceDetector = Depends(get_face_detector),
+    face_db: FaceDatabase = Depends(get_face_db),
 ):
     try:
         img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
@@ -93,7 +102,7 @@ async def search_face(
 
 
 @router.delete("/delete_face/{face_id}")
-async def delete_face(face_id: str):
+async def delete_face(face_id: str, face_db: FaceDatabase = Depends(get_face_db)):
     success = face_db.delete_face(face_id)
 
     if not success:
@@ -103,13 +112,18 @@ async def delete_face(face_id: str):
 
 
 @router.get("/list_faces")
-async def list_faces():
+async def list_faces(
+    face_db: FaceDatabase = Depends(get_face_db),
+):
     faces = face_db.get_all_faces()
     return {"faces": faces}
 
 
 @router.get("/health")
-async def health_check():
+async def health_check(
+    face_detector: FaceDetector = Depends(get_face_detector),
+    face_db: FaceDatabase = Depends(get_face_db),
+):
     """Health check endpoint for monitoring"""
     try:
         # Check if face detector is working
