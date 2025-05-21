@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
@@ -27,6 +29,8 @@ Class.metadata.create_all(bind=engine)
 ClassStudent.metadata.create_all(bind=engine)
 ParentStudent.metadata.create_all(bind=engine)
 Face.metadata.create_all(bind=engine)
+
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 app = FastAPI(
     title="Diploma FastAPI",
