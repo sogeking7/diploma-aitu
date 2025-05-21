@@ -27,3 +27,6 @@ htmlcov/
 
 *.log
 .DS_Store
+
+*.faiss
+*.pkl
