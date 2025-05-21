@@ -5,7 +5,7 @@ from fastapi.routing import APIRoute
 
 from app.api.v1.faces import faces_resource
 from app.db.session import engine
-from app.models import User, Attendance, Class, ClassStudent, ParentStudent
+from app.models import User, Attendance, Class, ClassStudent, ParentStudent, Face
 from app.api.v1.user import user_resource
 from app.api.v1.auth import auth_resource
 from app.api.v1.class_ import class_resource
@@ -26,6 +26,7 @@ Attendance.metadata.create_all(bind=engine)
 Class.metadata.create_all(bind=engine)
 ClassStudent.metadata.create_all(bind=engine)
 ParentStudent.metadata.create_all(bind=engine)
+Face.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Diploma FastAPI",
