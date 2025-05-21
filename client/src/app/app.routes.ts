@@ -38,6 +38,10 @@ export const routes: Routes = [
         path: 'face',
         loadChildren: () => import('./pages/face/face.routes').then(m => m.FACE_ROUTES),
       },
+      {
+        path: 'faces',
+        loadChildren: () => import('./pages/admin/faces/faces.routes').then(m => m.FACES_ROUTES),
+      },
     ],
   },
   {

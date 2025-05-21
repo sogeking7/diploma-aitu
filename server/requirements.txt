@@ -48,3 +48,10 @@ watchfiles==1.0.5
 websockets==15.0.1
 
 fastapi-pagination~=0.13.1
+
+facenet-pytorch
+Pillow
+numpy==1.26.4
+torch
+torchvision
+faiss-cpu

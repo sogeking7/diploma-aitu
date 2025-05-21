@@ -8,7 +8,8 @@ from app.repositories.session import get_user_id_from_session
 from app.repositories.user import get_user as get_user_repo
 from app.models.user import User
 from app.schemas.user import RoleEnum
-
+from app.services.face_db import FaceDatabase
+from app.services.face_detector import FaceDetector
 
 logger = get_logger(__name__)
 

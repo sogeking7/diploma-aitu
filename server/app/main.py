@@ -2,6 +2,8 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import add_pagination
 from fastapi.routing import APIRoute
+
+from app.api.v1.faces import faces_resource
 from app.db.session import engine
 from app.models import User, Attendance, Class, ClassStudent, ParentStudent
 from app.api.v1.user import user_resource
@@ -47,6 +49,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 app.include_router(auth_resource.router, prefix="/api/v1/auth", tags=["auth"])
+app.include_router(faces_resource.router, prefix="/api/v1/faces", tags=["faces"])
 app.include_router(
     user_resource.router,
     prefix="/api/v1/users",
