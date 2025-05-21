@@ -29,7 +29,7 @@ class FaceBase(BaseModel):
 
 class FaceOut(FaceBase):
     id: int
-    # user: Optional[UserBase] = None
+    user: Optional[UserBase]
     model_config = {"from_attributes": True}
 
 

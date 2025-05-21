@@ -51,6 +51,14 @@ async def list_faces(
     return await faces_service.list_faces(db, face_db)
 
 
+@router.get("/{face_id}")
+def read_face(
+    face_id: int,
+    db: Session = Depends(get_db),
+):
+    return faces_service.read_face(db, face_id)
+
+
 @router.get("/health")
 async def health_check(
     face_detector: FaceDetector = Depends(get_face_detector),

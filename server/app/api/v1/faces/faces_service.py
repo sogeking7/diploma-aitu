@@ -4,11 +4,13 @@ import time
 from PIL import Image
 from fastapi import HTTPException, UploadFile
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 
 from app.schemas.face import FaceCreate, FaceOut
 from app.services.face_db import FaceDatabase
 from app.services.face_detector import FaceDetector
 from app.repositories import face as face_repo
+from app.models import Face, User
 
 
 async def add_face(
@@ -114,3 +116,7 @@ async def health_check(
         }
     except Exception as e:
         return {"status": "unhealthy", "error": str(e), "timestamp": time.time()}
+
+
+def read_face(db: Session, face_id: int):
+    return face_repo.get_face(db, face_id)

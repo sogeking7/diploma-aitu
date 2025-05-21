@@ -18,8 +18,11 @@ def get_active_faces(db: Session):
     )
 
 
-def get_face(db: Session, face_id: int):
-    return get_active_faces(db).filter_by(id=face_id).first()
+def get_face(db: Session, face_id: int) -> Optional[FaceOut]:
+    db_face = get_active_faces(db).filter(Face.id == face_id).first()
+    if db_face:
+        return FaceOut.model_validate(db_face, from_attributes=True)
+    return None
 
 
 def get_faces(
@@ -29,10 +32,14 @@ def get_faces(
     query = get_active_faces(db)
     if user_id:
         query = query.filter(Face.user_id == user_id)
-    return paginate(db, query)
+    page = paginate(db, query)
+    page.items = [
+        FaceOut.model_validate(face, from_attributes=True) for face in page.items
+    ]
+    return page
 
 
-async def insert_face(db: Session, face_in: FaceCreate) -> FaceOut:
+def insert_face(db: Session, face_in: FaceCreate) -> Optional[FaceOut]:
     face = Face(
         user_id=face_in.user_id,
     )
@@ -40,7 +47,7 @@ async def insert_face(db: Session, face_in: FaceCreate) -> FaceOut:
     db.commit()
     db.refresh(face)
 
-    return FaceOut.model_validate(face)
+    return get_face(db, face.id)
 
 
 def soft_delete_face(db: Session, face_id: int) -> None:
