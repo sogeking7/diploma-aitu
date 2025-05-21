@@ -3,14 +3,13 @@ import time
 
 from PIL import Image
 from fastapi import HTTPException, UploadFile
+from fastapi_pagination import Page
 from sqlalchemy.orm import Session
-from sqlalchemy.orm import joinedload
 
 from app.schemas.face import FaceCreate, FaceOut
 from app.services.face_db import FaceDatabase
 from app.services.face_detector import FaceDetector
 from app.repositories import face as face_repo
-from app.models import Face, User
 
 
 async def add_face(
@@ -26,7 +25,7 @@ async def add_face(
     if embedding is None:
         raise HTTPException(status_code=400, detail="No face detected in the image")
 
-    new_face: FaceOut = await face_repo.insert_face(db, FaceCreate(user_id=user_id))
+    new_face: FaceOut = face_repo.insert_face(db, FaceCreate(user_id=user_id))
 
     success = face_db.add_face(
         face_id=new_face.id,
@@ -51,52 +50,42 @@ async def search_face(
     k: int = 1,
 ):
     try:
-        img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
+        img_bytes = await image.read()
+        img_pil = Image.open(io.BytesIO(img_bytes)).convert("RGB")
         embedding = face_detector.extract_embedding(img_pil)
 
         if embedding is None:
             raise HTTPException(status_code=400, detail="No face detected in the image")
 
-        # Search in database
         raw_results = face_db.search_face(
             embedding=embedding[0], threshold=threshold, k=k
         )
 
         matches = [
             {
-                "face_id": int(face_id),  # Convert numpy.int64 to regular Python int
+                "face": face_repo.get_face(db, int(face_id)),
                 "distance": float(distance),
-                "metadata": metadata,
             }
             for face_id, distance, metadata in raw_results
         ]
 
-        return {"matches": matches}
+        return matches[0]
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-async def delete_face(db: Session, face_db: FaceDatabase, face_id: int):
+def delete_face(db: Session, face_db: FaceDatabase, face_id: int):
     success = face_db.delete_face(face_id)
 
     if not success:
         raise HTTPException(status_code=404, detail=f"Face ID {face_id} not found")
-
+    else:
+        face_repo.delete_face(db, face_id)
     return {"face_id": face_id, "status": "deleted successfully"}
 
 
-async def list_faces(db: Session, face_db: FaceDatabase):
-    faces_metadata = face_db.get_all_faces()
-
-    result = [
-        {
-            "face_id": int(face_id),
-            "user_id": int(metadata.get("user_id")) if "user_id" in metadata else None,
-        }
-        for face_id, metadata in faces_metadata.items()
-    ]
-
-    return result
+def get_faces(db: Session) -> Page[FaceOut]:
+    return face_repo.get_faces(db)
 
 
 async def health_check(

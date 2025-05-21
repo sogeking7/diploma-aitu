@@ -1,7 +1,9 @@
 from fastapi import APIRouter, File, UploadFile, Form, Depends
+from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_face_detector, get_face_db, get_db
+from app.schemas.face import FaceOut
 from app.services.face_detector import FaceDetector
 from app.services.face_db import FaceDatabase
 from app.api.v1.faces import faces_service
@@ -34,29 +36,20 @@ async def search_face(
     )
 
 
-@router.delete("/delete_face/{face_id}")
-async def delete_face(
+@router.delete("/{face_id}")
+def delete_face(
     face_id: int,
     face_db: FaceDatabase = Depends(get_face_db),
     db: Session = Depends(get_db),
 ):
-    return await faces_service.delete_face(db, face_db, face_id)
+    return faces_service.delete_face(db, face_db, face_id)
 
 
-@router.get("/list_faces")
-async def list_faces(
-    face_db: FaceDatabase = Depends(get_face_db),
+@router.get("/", response_model=Page[FaceOut])
+def get_faces(
     db: Session = Depends(get_db),
 ):
-    return await faces_service.list_faces(db, face_db)
-
-
-@router.get("/{face_id}")
-def read_face(
-    face_id: int,
-    db: Session = Depends(get_db),
-):
-    return faces_service.read_face(db, face_id)
+    return faces_service.get_faces(db)
 
 
 @router.get("/health")
@@ -65,3 +58,11 @@ async def health_check(
     face_db: FaceDatabase = Depends(get_face_db),
 ):
     return await faces_service.health_check(face_detector, face_db)
+
+
+@router.get("/{face_id}")
+def read_face(
+    face_id: int,
+    db: Session = Depends(get_db),
+):
+    return faces_service.read_face(db, face_id)

@@ -1,4 +1,4 @@
-from typing import Optional, List, Any
+from typing import Optional
 
 from fastapi_pagination import Page
 from sqlalchemy.orm import Session, joinedload
@@ -13,7 +13,6 @@ def get_active_faces(db: Session):
     return (
         db.query(Face)
         .join(User, Face.user_id == User.id)
-        .filter(Face.deleted == False)
         .options(joinedload(Face.user))
     )
 
@@ -50,9 +49,9 @@ def insert_face(db: Session, face_in: FaceCreate) -> Optional[FaceOut]:
     return get_face(db, face.id)
 
 
-def soft_delete_face(db: Session, face_id: int) -> None:
-    face = get_active_faces(db).filter_by(id=face_id).first()
+def delete_face(db: Session, face_id: int) -> None:
+    face = db.query(Face).filter(Face.id == face_id).first()
     if not face:
         raise ValueError(f"Face {face_id} not found")
-    face.deleted = True
+    db.delete(face)
     db.commit()

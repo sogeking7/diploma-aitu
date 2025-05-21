@@ -1,11 +1,8 @@
-import uuid
 from sqlalchemy import (
     Column,
     Integer,
     DateTime,
     func,
-    String,
-    Boolean,
 )
 from sqlalchemy.orm import relationship
 
@@ -18,7 +15,6 @@ class Face(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, nullable=False)
 
-    deleted = Column(Boolean, nullable=False, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
