@@ -33,12 +33,15 @@ class FaceDatabase:
 
     def _load_existing_database(self) -> None:
         self.index = faiss.read_index(self.index_file)
+        if not isinstance(self.index, faiss.IndexIDMap):
+            self.index = faiss.IndexIDMap(self.index)
         with open(self.metadata_file, "rb") as f:
             self.metadata = pickle.load(f)
         print(f"Loaded existing face database with {self.index.ntotal} faces")
 
     def _create_new_database(self) -> None:
-        self.index = faiss.IndexFlatL2(self.dimension)  # L2 distance
+        base_index = faiss.IndexFlatL2(self.dimension)
+        self.index = faiss.IndexIDMap(base_index)
         self.metadata = {}
         print("Created new face database")
 
@@ -56,12 +59,12 @@ class FaceDatabase:
         if face_id in self.metadata:
             return False  # ID already exists
 
-        normalized_embedding = self._normalize_embedding(embedding)
-        self.index.add(normalized_embedding)
+        embedding = self._normalize_embedding(embedding)
+        self.index.add_with_ids(embedding, np.array([face_id], dtype=np.int64))
 
         self.metadata[face_id] = {
-            "index": self.index.ntotal - 1,
             "info": metadata or {},
+            "embedding": embedding.tolist(),
         }
 
         self.save()
@@ -69,66 +72,34 @@ class FaceDatabase:
 
     def search_face(
         self, embedding: np.ndarray, k: int = 1, threshold: float = 0.8
-    ) -> List[Tuple[str, float, Dict]]:
+    ) -> List[Tuple[int, float, Dict]]:
         if self.index.ntotal == 0:
             return []
 
-        normalized_embedding = self._normalize_embedding(embedding)
-        distances, indices = self.index.search(normalized_embedding, k)
+        embedding = self._normalize_embedding(embedding)
+        distances, ids = self.index.search(embedding, k)
 
         results = []
-        for i, idx in enumerate(indices[0]):
-            if idx == -1:  # Invalid result
+        for i, face_id in enumerate(ids[0]):
+            if face_id == -1:
                 continue
-
-            face_id = self._find_face_id_by_index(idx)
             distance = distances[0][i]
-
-            if face_id and distance < threshold:
+            if distance < threshold and face_id in self.metadata:
                 results.append(
                     (face_id, float(distance), self.metadata[face_id]["info"])
                 )
-
         return results
 
-    def _find_face_id_by_index(self, index: int) -> Optional[str]:
-        for face_id, data in self.metadata.items():
-            if data["index"] == index:
-                return face_id
-        return None
-
-    def delete_face(self, face_id: str) -> bool:
+    def delete_face(self, face_id: int) -> bool:
         if face_id not in self.metadata:
             return False
 
-        all_ids = list(self.metadata.keys())
-        all_ids.remove(face_id)
+        selector = faiss.IDSelectorBatch(np.array([face_id], dtype=np.int64))
+        self.index.remove_ids(selector)
+        del self.metadata[face_id]
 
-        if not all_ids:  # No faces left
-            self._create_new_database()
-            self.save()
-            return True
-
-        self._rebuild_index_without_face(all_ids)
         self.save()
         return True
 
-    def _rebuild_index_without_face(self, remaining_ids: List[str]) -> None:
-        remaining_vectors = []
-        new_metadata = {}
-
-        for i, face_id in enumerate(remaining_ids):
-            idx = self.metadata[face_id]["index"]
-            vector = faiss.vector_to_array(self.index.get_vector(idx)).reshape(
-                1, self.dimension
-            )
-            remaining_vectors.append(vector)
-
-            new_metadata[face_id] = {"index": i, "info": self.metadata[face_id]["info"]}
-
-        self.index = faiss.IndexFlatL2(self.dimension)
-        self.index.add(np.vstack(remaining_vectors).astype(np.float32))
-        self.metadata = new_metadata
-
-    def get_all_faces(self) -> Dict[str, Dict]:
-        return {id: data["info"] for id, data in self.metadata.items()}
+    def get_all_faces(self) -> Dict[int, Dict]:
+        return {face_id: data["info"] for face_id, data in self.metadata.items()}

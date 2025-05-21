@@ -5,40 +5,39 @@ from PIL import Image
 from fastapi import HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
+from app.schemas.face import FaceCreate, FaceOut
 from app.services.face_db import FaceDatabase
 from app.services.face_detector import FaceDetector
+from app.repositories import face as face_repo
 
 
 async def add_face(
     db: Session,
     face_detector: FaceDetector,
     face_db: FaceDatabase,
-    face_id: str,
-    name: str,
+    user_id: int,
     image: UploadFile,
 ):
-    try:
-        img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
-        embedding = face_detector.extract_embedding(img_pil)
+    img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
+    embedding = face_detector.extract_embedding(img_pil)
 
-        if embedding is None:
-            raise HTTPException(status_code=400, detail="No face detected in the image")
+    if embedding is None:
+        raise HTTPException(status_code=400, detail="No face detected in the image")
 
-        success = face_db.add_face(
-            face_id=face_id,
-            embedding=embedding[0],
-            metadata={"name": name},
+    new_face: FaceOut = await face_repo.insert_face(db, FaceCreate(user_id=user_id))
+
+    success = face_db.add_face(
+        face_id=new_face.id,
+        embedding=embedding[0],
+        metadata={"user_id": user_id},
+    )
+
+    if not success:
+        raise HTTPException(
+            status_code=400, detail=f"Face ID {new_face.id} already exists"
         )
 
-        if not success:
-            raise HTTPException(
-                status_code=400, detail=f"Face ID {face_id} already exists"
-            )
-
-        return {"face_id": face_id, "status": "added successfully"}
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"face_id": new_face.id, "status": "added successfully"}
 
 
 async def search_face(
@@ -57,20 +56,25 @@ async def search_face(
             raise HTTPException(status_code=400, detail="No face detected in the image")
 
         # Search in database
-        results = face_db.search_face(embedding=embedding[0], threshold=threshold, k=k)
+        raw_results = face_db.search_face(
+            embedding=embedding[0], threshold=threshold, k=k
+        )
 
-        return {
-            "matches": [
-                {"face_id": face_id, "distance": distance, "metadata": metadata}
-                for face_id, distance, metadata in results
-            ]
-        }
+        matches = [
+            {
+                "face_id": int(face_id),  # Convert numpy.int64 to regular Python int
+                "distance": float(distance),
+                "metadata": metadata,
+            }
+            for face_id, distance, metadata in raw_results
+        ]
 
+        return {"matches": matches}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-async def delete_face(db: Session, face_db: FaceDatabase, face_id: str):
+async def delete_face(db: Session, face_db: FaceDatabase, face_id: int):
     success = face_db.delete_face(face_id)
 
     if not success:
@@ -80,8 +84,17 @@ async def delete_face(db: Session, face_db: FaceDatabase, face_id: str):
 
 
 async def list_faces(db: Session, face_db: FaceDatabase):
-    faces = face_db.get_all_faces()
-    return {"faces": faces}
+    faces_metadata = face_db.get_all_faces()
+
+    result = [
+        {
+            "face_id": int(face_id),
+            "user_id": int(metadata.get("user_id")) if "user_id" in metadata else None,
+        }
+        for face_id, metadata in faces_metadata.items()
+    ]
+
+    return result
 
 
 async def health_check(

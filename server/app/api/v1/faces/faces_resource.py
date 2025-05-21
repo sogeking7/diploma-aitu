@@ -1,4 +1,4 @@
-from fastapi import APIRouter, File, UploadFile, Form, HTTPException, Depends
+from fastapi import APIRouter, File, UploadFile, Form, Depends
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_face_detector, get_face_db, get_db
@@ -11,16 +11,13 @@ router = APIRouter()
 
 @router.post("/add_face")
 async def add_face(
-    face_id: str = Form(...),
-    name: str = Form(...),
+    user_id: int = Form(...),
     image: UploadFile = File(...),
     face_detector: FaceDetector = Depends(get_face_detector),
     face_db: FaceDatabase = Depends(get_face_db),
     db: Session = Depends(get_db),
 ):
-    return await faces_service.add_face(
-        db, face_detector, face_db, face_id, name, image
-    )
+    return await faces_service.add_face(db, face_detector, face_db, user_id, image)
 
 
 @router.post("/search_face")
@@ -39,7 +36,7 @@ async def search_face(
 
 @router.delete("/delete_face/{face_id}")
 async def delete_face(
-    face_id: str,
+    face_id: int,
     face_db: FaceDatabase = Depends(get_face_db),
     db: Session = Depends(get_db),
 ):
