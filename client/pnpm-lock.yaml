@@ -35,6 +35,9 @@ importers:
       '@ant-design/icons-angular':
         specifier: ^19.0.0
         version: 19.0.0(@angular/common@19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(@angular/platform-browser@19.2.11(@angular/animations@19.2.11(@angular/common@19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0)))(@angular/common@19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0)))(rxjs@7.8.2)
+      lucide-angular:
+        specifier: ^0.511.0
+        version: 0.511.0(@angular/common@19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))
       ng-zorro-antd:
         specifier: ^19.2.2
         version: 19.2.2(477f0c634f690e56afeed1e552d14528)
@@ -75,6 +78,9 @@ importers:
       '@types/jasmine':
         specifier: ~5.1.0
         version: 5.1.8
+      '@types/webrtc':
+        specifier: ^0.0.46
+        version: 0.0.46
       '@typescript-eslint/eslint-plugin':
         specifier: 7.11.0
         version: 7.11.0(@typescript-eslint/parser@7.11.0(eslint@9.27.0(jiti@1.21.7))(typescript@5.7.3))(eslint@9.27.0(jiti@1.21.7))(typescript@5.7.3)
@@ -1827,6 +1833,9 @@ packages:
   '@types/sockjs@0.3.36':
     resolution: {integrity: sha512-MK9V6NzAS1+Ud7JV9lJLFqW85VbC9dq3LmwZCuBe4wBDgKC0Kj/jd8Xl+nSviU+Qc3+m7umHHyHg//2KSa0a0Q==}
 
+  '@types/webrtc@0.0.46':
+    resolution: {integrity: sha512-cvCnjKy0ma9ODWbVYBTMMB+WkocwLcscCwn2/caDVdb9MWaesS8PYGapIIHFsAaIBXRFlH1Fc7ZjIBO6pH0HKA==}
+
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
@@ -3398,6 +3407,12 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  lucide-angular@0.511.0:
+    resolution: {integrity: sha512-oACMDNR7P/C6lntcHZVZX3muVRLNzaD1A9RqNrF7KHeNvJZhNn5rqnDOCmt9Kghy4irM8/GSPCJhk4NQgf7SiA==}
+    peerDependencies:
+      '@angular/common': 13.x - 19.x
+      '@angular/core': 13.x - 19.x
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -6645,6 +6660,8 @@ snapshots:
     dependencies:
       '@types/node': 22.15.18
 
+  '@types/webrtc@0.0.46': {}
+
   '@types/ws@8.18.1':
     dependencies:
       '@types/node': 22.15.18
@@ -8431,6 +8448,12 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lucide-angular@0.511.0(@angular/common@19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2))(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0)):
+    dependencies:
+      '@angular/common': 19.2.11(@angular/core@19.2.11(rxjs@7.8.2)(zone.js@0.15.0))(rxjs@7.8.2)
+      '@angular/core': 19.2.11(rxjs@7.8.2)(zone.js@0.15.0)
+      tslib: 2.8.1
 
   magic-string@0.30.17:
     dependencies:

@@ -10,7 +10,7 @@
 import { AppSchemasUserUserBase } from './app-schemas-user-user-base';
 
 
-export interface AttendanceOut { 
+export interface FaceAttendanceOut { 
     student_user_id: number;
     time_in: string;
     time_out?: string | null;

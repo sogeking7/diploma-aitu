@@ -20,6 +20,8 @@ import { Observable }                                        from 'rxjs';
 import { HTTPValidationError } from '../model/http-validation-error';
 // @ts-ignore
 import { PageFaceOut } from '../model/page-face-out';
+// @ts-ignore
+import { SearchFaceMatch } from '../model/search-face-match';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -346,9 +348,9 @@ export class FacesService extends BaseService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
-    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
-    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<SearchFaceMatch>;
+    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<SearchFaceMatch>>;
+    public searchFace(image: Blob, threshold?: number, k?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<SearchFaceMatch>>;
     public searchFace(image: Blob, threshold?: number, k?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
         if (image === null || image === undefined) {
             throw new Error('Required parameter image was null or undefined when calling searchFace.');
@@ -409,7 +411,7 @@ export class FacesService extends BaseService {
 
         let localVarPath = `/api/v1/faces/search_face`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<any>('post', `${basePath}${localVarPath}`,
+        return this.httpClient.request<SearchFaceMatch>('post', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,

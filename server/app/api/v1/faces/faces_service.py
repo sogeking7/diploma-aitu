@@ -14,11 +14,11 @@ from app.repositories import attendance as attendance_repo
 
 
 async def add_face(
-        db: Session,
-        face_detector: FaceDetector,
-        face_db: FaceDatabase,
-        user_id: int,
-        image: UploadFile,
+    db: Session,
+    face_detector: FaceDetector,
+    face_db: FaceDatabase,
+    user_id: int,
+    image: UploadFile,
 ):
     img_pil = Image.open(io.BytesIO(await image.read())).convert("RGB")
     embedding = face_detector.extract_embedding(img_pil)
@@ -43,12 +43,12 @@ async def add_face(
 
 
 async def search_face(
-        db: Session,
-        face_detector: FaceDetector,
-        face_db: FaceDatabase,
-        image: UploadFile,
-        threshold: float = 0.8,
-        k: int = 1,
+    db: Session,
+    face_detector: FaceDetector,
+    face_db: FaceDatabase,
+    image: UploadFile,
+    threshold: float = 0.8,
+    k: int = 1,
 ) -> SearchFaceMatch:
     try:
         img_bytes = await image.read()
@@ -68,10 +68,7 @@ async def search_face(
         face_id, distance, metadata = raw_results[0]
         face = face_repo.get_face(db, int(face_id))
 
-        return SearchFaceMatch(
-            face=face,
-            distance=float(distance)
-        )
+        return SearchFaceMatch(face=face, distance=float(distance))
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -92,8 +89,8 @@ def get_faces(db: Session) -> Page[FaceOut]:
 
 
 async def health_check(
-        face_detector: FaceDetector,
-        face_db: FaceDatabase,
+    face_detector: FaceDetector,
+    face_db: FaceDatabase,
 ):
     try:
         device_info = face_detector.get_device_info()

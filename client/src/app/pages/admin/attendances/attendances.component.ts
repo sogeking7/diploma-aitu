@@ -5,11 +5,13 @@ import { DatePipe, NgForOf } from '@angular/common';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttendanceOut, AttendancesService } from '../../../../lib/open-api';
+import { LucideAngularModule } from 'lucide-angular';
+import { NzIconDirective } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-attendances',
   templateUrl: './attendances.component.html',
-  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule, DatePipe],
+  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule, DatePipe, LucideAngularModule, NzIconDirective],
   styleUrls: ['./attendances.component.css'],
   standalone: true,
 })

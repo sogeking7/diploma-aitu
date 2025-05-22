@@ -23,6 +23,8 @@ import { AttendanceOut } from '../model/attendance-out';
 // @ts-ignore
 import { AttendanceUpdate } from '../model/attendance-update';
 // @ts-ignore
+import { FaceAttendanceOut } from '../model/face-attendance-out';
+// @ts-ignore
 import { HTTPValidationError } from '../model/http-validation-error';
 // @ts-ignore
 import { PageAttendanceOut } from '../model/page-attendance-out';
@@ -100,6 +102,94 @@ export class AttendancesService extends BaseService {
             {
                 context: localVarHttpContext,
                 body: attendanceCreate,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create Face Attendance
+     * @param image 
+     * @param threshold 
+     * @param k 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createFaceAttendance(image: Blob, threshold?: number, k?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<FaceAttendanceOut>;
+    public createFaceAttendance(image: Blob, threshold?: number, k?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<FaceAttendanceOut>>;
+    public createFaceAttendance(image: Blob, threshold?: number, k?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<FaceAttendanceOut>>;
+    public createFaceAttendance(image: Blob, threshold?: number, k?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (image === null || image === undefined) {
+            throw new Error('Required parameter image was null or undefined when calling createFaceAttendance.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        let localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (image !== undefined) {
+            localVarFormParams = localVarFormParams.append('image', <any>image) as any || localVarFormParams;
+        }
+        if (threshold !== undefined) {
+            localVarFormParams = localVarFormParams.append('threshold', <any>threshold) as any || localVarFormParams;
+        }
+        if (k !== undefined) {
+            localVarFormParams = localVarFormParams.append('k', <any>k) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/v1/attendances/face`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<FaceAttendanceOut>('post', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
@@ -345,6 +435,84 @@ export class AttendancesService extends BaseService {
         }
 
         let localVarPath = `/api/v1/attendances/date-range`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PageAttendanceOut>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                transferCache: localVarTransferCache,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Read Attendances By Date Range And Student
+     * @param studentId 
+     * @param startDate Start date for attendance records
+     * @param endDate End date for attendance records
+     * @param page Page number
+     * @param size Page size
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public readAttendancesByDateRangeAndStudent(studentId: number, startDate: string, endDate: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageAttendanceOut>;
+    public readAttendancesByDateRangeAndStudent(studentId: number, startDate: string, endDate: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageAttendanceOut>>;
+    public readAttendancesByDateRangeAndStudent(studentId: number, startDate: string, endDate: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageAttendanceOut>>;
+    public readAttendancesByDateRangeAndStudent(studentId: number, startDate: string, endDate: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (studentId === null || studentId === undefined) {
+            throw new Error('Required parameter studentId was null or undefined when calling readAttendancesByDateRangeAndStudent.');
+        }
+        if (startDate === null || startDate === undefined) {
+            throw new Error('Required parameter startDate was null or undefined when calling readAttendancesByDateRangeAndStudent.');
+        }
+        if (endDate === null || endDate === undefined) {
+            throw new Error('Required parameter endDate was null or undefined when calling readAttendancesByDateRangeAndStudent.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>startDate, 'start_date');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>endDate, 'end_date');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>page, 'page');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>size, 'size');
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/api/v1/attendances/student/${this.configuration.encodeParam({name: "studentId", value: studentId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: undefined})}/date-range`;
         const { basePath, withCredentials } = this.configuration;
         return this.httpClient.request<PageAttendanceOut>('get', `${basePath}${localVarPath}`,
             {

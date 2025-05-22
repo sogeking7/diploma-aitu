@@ -2,28 +2,25 @@ import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, Vie
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
-import { FaceOut, FacesService } from '../../../lib/open-api';
+import { AttendancesService, FaceAttendanceOut } from '../../../lib/open-api';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-face',
-  templateUrl: './face.component.html',
-  styleUrl: './face.component.css',
+  templateUrl: './take-attendance.component.html',
+  styleUrl: './take-attendance.component.css',
   standalone: true,
   imports: [CommonModule, NzButtonModule, NzIconModule],
 })
-export class FaceComponent implements AfterViewInit, OnDestroy {
+export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoElement') videoElement!: ElementRef;
 
   private stream: MediaStream | null = null;
-  public searchResults: {
-    face: FaceOut;
-    distance: number;
-  } | null = null;
+  public searchResults: FaceAttendanceOut | null = null;
   public isSearching = false;
 
   constructor(
-    private facesService: FacesService,
+    private attendanceService: AttendancesService,
     private cdr: ChangeDetectorRef,
     private notification: NzNotificationService
   ) {}
@@ -49,21 +46,19 @@ export class FaceComponent implements AfterViewInit, OnDestroy {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
       canvas.toBlob(
-        (blob: Blob | null) => {
+        blob => {
           if (blob) {
-            this.facesService.searchFace(blob).subscribe({
+            this.attendanceService.createFaceAttendance(blob).subscribe({
               next: results => {
                 this.searchResults = results;
                 this.isSearching = false;
                 this.cdr.detectChanges();
-                if (results['face']) {
-                  const face = this.searchResults?.face;
-                  // const distance = this.searchResults?.distance;
-                  const fullName = `${face?.user?.first_name} ${face?.user?.last_name}`;
-                  this.notification.success('Success', `Found: ${fullName}`);
-                } else {
-                  this.notification.info('Information', 'No matching faces found in the database.');
-                }
+                const student_user = this.searchResults.student_user;
+                const fullName = `${student_user?.first_name} ${student_user?.last_name}`;
+                const time_in = this.searchResults.time_in;
+                const time_out = this.searchResults.time_out;
+
+                this.notification.success('Success', `Found: ${fullName} \nTime In: ${time_in} \nTime Out: ${time_out}`);
               },
               error: error => {
                 this.isSearching = false;
