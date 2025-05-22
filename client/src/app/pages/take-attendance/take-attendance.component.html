@@ -1,3 +1,19 @@
+<ng-template #customNotification>
+  <div class="notification-content">
+    <div class="user-info">
+      <div class="user-name"><strong>Student:</strong> {{ searchResult?.student_user?.first_name }} {{ searchResult?.student_user?.last_name }}</div>
+      <div class="user-id"><strong>Student ID:</strong> {{ searchResult?.student_user_id }}</div>
+    </div>
+    <div class="attendance-info">
+      <div class="time-in"><strong>Time In:</strong> {{ searchResult?.time_in | date: 'medium' }}</div>
+      <div class="time-out" *ngIf="searchResult?.time_out"><strong>Time Out:</strong> {{ searchResult?.time_out | date: 'medium' }}</div>
+      <div class="no-timeout" *ngIf="!searchResult?.time_out">
+        <em>No time out record</em>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
 <div class="camera-container">
   <video #videoElement autoplay playsinline class="video-element"></video>
   <div class="button-container">
@@ -11,7 +27,7 @@
     </button>
   </div>
 
-  <div *ngIf="searchResults" class="results-container">
+  <div *ngIf="searchResult" class="results-container">
     <!-- Display search results here if needed -->
   </div>
 </div>

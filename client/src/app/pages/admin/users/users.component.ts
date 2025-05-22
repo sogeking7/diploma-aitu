@@ -15,6 +15,7 @@ import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-users',
@@ -34,6 +35,7 @@ import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
     NzInputModule,
     NzSelectModule,
     NzDescriptionsModule,
+    NzTypographyComponent,
   ],
   styleUrls: ['./users.component.css'],
   standalone: true,

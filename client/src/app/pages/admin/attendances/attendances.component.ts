@@ -7,11 +7,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AttendanceOut, AttendancesService } from '../../../../lib/open-api';
 import { LucideAngularModule } from 'lucide-angular';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
+import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-attendances',
   templateUrl: './attendances.component.html',
-  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule, DatePipe, LucideAngularModule, NzIconDirective],
+  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule, DatePipe, LucideAngularModule, NzIconDirective, NzTypographyComponent],
   styleUrls: ['./attendances.component.css'],
   standalone: true,
 })

@@ -10,10 +10,11 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { getRoleTagColor } from '../../../../lib/common';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-faces',
-  imports: [CommonModule, RouterModule, NzTableModule, NzButtonModule, NzTagModule, NzPopconfirmModule, NzIconModule],
+  imports: [CommonModule, RouterModule, NzTableModule, NzButtonModule, NzTagModule, NzPopconfirmModule, NzIconModule, NzTypographyComponent],
   templateUrl: './faces.component.html',
   styleUrl: './faces.component.css',
 })

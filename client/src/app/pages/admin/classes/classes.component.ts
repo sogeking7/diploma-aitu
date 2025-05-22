@@ -29,6 +29,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzEmptyModule } from 'ng-zorro-antd/empty';
 import { NzModalModule } from 'ng-zorro-antd/modal';
+import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-classes',
@@ -52,6 +53,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
     NzEmptyModule,
     NzModalModule,
     FormsModule,
+    NzTypographyComponent,
   ],
   styleUrls: ['./classes.component.css'],
   standalone: true,
