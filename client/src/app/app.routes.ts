@@ -46,6 +46,10 @@ export const routes: Routes = [
         path: 'take-attendance',
         loadChildren: () => import('./pages/take-attendance/take-attendance.routes').then(m => m.TAKE_ATTENDANCE_ROUTES),
       },
+      {
+        path: 'parents',
+        loadChildren: () => import('./pages/admin/parents/parents.routes').then(m => m.PARENTS_ROUTES),
+      },
     ],
   },
   {
