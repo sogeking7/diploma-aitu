@@ -1,10 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-face',
   templateUrl: './face.component.html',
   styleUrl: './face.component.css',
   standalone: true,
+  imports: [NzButtonModule, NzIconModule],
 })
 export class FaceComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoElement') videoElement!: ElementRef;
