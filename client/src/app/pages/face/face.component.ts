@@ -1,18 +1,32 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { FaceOut, FacesService } from '../../../lib/open-api';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-face',
   templateUrl: './face.component.html',
   styleUrl: './face.component.css',
   standalone: true,
-  imports: [NzButtonModule, NzIconModule],
+  imports: [CommonModule, NzButtonModule, NzIconModule],
 })
 export class FaceComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoElement') videoElement!: ElementRef;
 
   private stream: MediaStream | null = null;
+  public searchResults: {
+    face: FaceOut;
+    distance: number;
+  } | null = null;
+  public isSearching = false;
+
+  constructor(
+    private facesService: FacesService,
+    private cdr: ChangeDetectorRef,
+    private notification: NzNotificationService
+  ) {}
 
   ngAfterViewInit(): void {
     this.setupCamera();
@@ -20,6 +34,56 @@ export class FaceComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopCamera();
+  }
+
+  captureAndSearch(): void {
+    this.isSearching = true;
+
+    const video = this.videoElement.nativeElement;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(
+        blob => {
+          if (blob) {
+            this.facesService.searchFace(blob).subscribe({
+              next: results => {
+                this.searchResults = results;
+                this.isSearching = false;
+                this.cdr.detectChanges();
+                console.log('Face search results:', results);
+                if (results['face']) {
+                  const face = this.searchResults?.face;
+                  // const distance = this.searchResults?.distance;
+                  const fullName = `${face?.user?.first_name} ${face?.user?.last_name}`;
+                  this.notification.success('Success', `Found: ${fullName}`);
+                } else {
+                  this.notification.info('Information', 'No matching faces found in the database.');
+                }
+              },
+              error: error => {
+                console.error('Error searching face:', error);
+                this.isSearching = false;
+                this.cdr.detectChanges();
+                this.notification.error('Error', error.error?.detail || error.error?.message || 'Failed to search for faces. Please try again.');
+              },
+            });
+          } else {
+            console.error('Failed to convert canvas to blob');
+            this.isSearching = false;
+            this.cdr.detectChanges();
+            this.notification.error('Error', 'Could not initialize camera capture. Please try again.');
+          }
+        },
+        'image/jpeg',
+        1.0
+      ); // JPEG format with 100% quality
+    }
   }
 
   private async setupCamera(): Promise<void> {
