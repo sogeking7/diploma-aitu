@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
-import { NgForOf } from '@angular/common';
+import { DatePipe, NgForOf } from '@angular/common';
 import { NzButtonComponent } from 'ng-zorro-antd/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AttendanceOut, AttendancesService } from '../../../../lib/open-api';
@@ -9,7 +9,7 @@ import { AttendanceOut, AttendancesService } from '../../../../lib/open-api';
 @Component({
   selector: 'app-attendances',
   templateUrl: './attendances.component.html',
-  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule],
+  imports: [NzTableModule, NgForOf, NzButtonComponent, NzTagModule, DatePipe],
   styleUrls: ['./attendances.component.css'],
   standalone: true,
 })

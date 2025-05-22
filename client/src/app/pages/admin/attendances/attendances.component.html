@@ -25,8 +25,8 @@
     <tr *ngFor="let a of attendanceTable.data">
       <td>{{ a.id }}</td>
       <td>{{ a.student_user_id }}</td>
-      <td>{{ a.time_in }}</td>
-      <td>{{ a.time_out }}</td>
+      <td>{{ a.time_in | date:'medium' }}</td>
+      <td>{{ a.time_out | date:'medium' }}</td>
       <!--      <td>-->
       <!--        <nz-tag [nzColor]="a.status === 'present' ? 'green' : 'red'">-->
       <!--          {{ a.status }}-->

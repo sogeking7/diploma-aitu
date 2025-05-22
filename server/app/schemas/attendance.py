@@ -22,3 +22,7 @@ class AttendanceUpdate(AttendanceBase):
 class AttendanceOut(AttendanceBase):
     id: int
     model_config = {"from_attributes": True}
+
+class AttendanceFaceCreate(BaseModel):
+    time_in: datetime
+    time_out: Optional[datetime] = None

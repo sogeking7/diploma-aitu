@@ -73,3 +73,25 @@ def soft_delete_attendance(db: Session, attendance_id: int) -> None:
         raise ValueError(f"Attendance {attendance_id} not found")
     attendance.deleted = True
     db.commit()
+
+def get_attendances_by_date_range_and_student(
+        db: Session, start_date: datetime, end_date: datetime, student_user_id: int
+) -> Page[AttendanceOut]:
+    return paginate(
+        db,
+        get_active_attendances(db).filter(
+            Attendance.time_in >= start_date,
+            Attendance.time_in <= end_date,
+            Attendance.student_user_id == student_user_id
+        ),
+    )
+
+def get_todays_attendance_by_student(db: Session, student_user_id: int) -> Optional[Attendance]:
+    today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    today_end = today_start.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+    return get_active_attendances(db).filter(
+        Attendance.student_user_id == student_user_id,
+        Attendance.time_in >= today_start,
+        Attendance.time_in <= today_end
+    ).first()

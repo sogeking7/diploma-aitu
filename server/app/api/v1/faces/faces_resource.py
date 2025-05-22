@@ -3,7 +3,7 @@ from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_face_detector, get_face_db, get_db
-from app.schemas.face import FaceOut
+from app.schemas.face import FaceOut, SearchFaceMatch
 from app.services.face_detector import FaceDetector
 from app.services.face_db import FaceDatabase
 from app.api.v1.faces import faces_service
@@ -22,7 +22,7 @@ async def add_face(
     return await faces_service.add_face(db, face_detector, face_db, user_id, image)
 
 
-@router.post("/search_face")
+@router.post("/search_face", response_model=SearchFaceMatch)
 async def search_face(
     image: UploadFile = File(...),
     threshold: float = Form(0.8),
@@ -30,7 +30,7 @@ async def search_face(
     face_detector: FaceDetector = Depends(get_face_detector),
     face_db: FaceDatabase = Depends(get_face_db),
     db: Session = Depends(get_db),
-):
+) -> SearchFaceMatch:
     return await faces_service.search_face(
         db, face_detector, face_db, image, threshold, k
     )
