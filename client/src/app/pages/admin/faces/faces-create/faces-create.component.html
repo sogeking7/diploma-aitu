@@ -1,0 +1,60 @@
+<div class="page-header" style="margin-bottom: 16px">
+  <button nz-button (click)="goBack()"><i nz-icon nzType="arrow-left"></i> Back</button>
+</div>
+
+<nz-card>
+  <form nz-form [formGroup]="faceForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>User ID</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input user ID">
+        <input nz-input formControlName="user_id" type="number" placeholder="User ID" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Face Image</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please select an image">
+        <nz-upload
+          nzType="drag"
+          [nzMultiple]="false"
+          [nzBeforeUpload]="beforeUpload"
+          (nzChange)="handleChange($event)"
+          [nzShowUploadList]="false"
+        >
+          <p class="ant-upload-drag-icon">
+            <span nz-icon nzType="inbox"></span>
+          </p>
+          <p class="ant-upload-text">Click or drag image file to this area to upload</p>
+          <p class="ant-upload-hint">
+            Support for single image upload. Use a clear face photo for best recognition results.
+          </p>
+        </nz-upload>
+
+        <div *ngIf="selectedFile" class="mt-3">
+          <strong>Selected file:</strong> {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }} KB)
+        </div>
+
+        <!-- Keep the legacy file input as a fallback or for testing -->
+        <div class="mt-3" style="display: none;">
+          <input
+            #fileInput
+            type="file"
+            (change)="onFileSelected($event)"
+            accept="image/*"
+          />
+        </div>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzOffset]="6" [nzSpan]="14">
+        <button nz-button nzType="primary" [disabled]="isSubmitting || !faceForm.valid || !selectedFile">
+          Create Face
+        </button>
+        <button nz-button (click)="cancelCreate()" type="button" style="margin-left: 8px">
+          Cancel
+        </button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>
