@@ -43,24 +43,28 @@ def get_class(db: Session, class_id: int) -> Optional[ClassOut]:
 
 
 def get_classes(db: Session) -> Page[ClassOut]:
-    # Получаем страницу с ORM объектами Class (включая teacher_user)
     base_query = get_active_classes(db)
     page = paginate(db, base_query)
 
     class_ids = [cls.id for cls in page.items]
 
-    # Считаем студентов одним запросом
     counts = (
-        db.query(ClassStudent.class_id, func.count().label("count"))
-        .filter(ClassStudent.class_id.in_(class_ids), ClassStudent.deleted == False)
+        db.query(
+            ClassStudent.class_id,
+            func.count(ClassStudent.student_user_id).label("count"),
+        )
+        .join(User, ClassStudent.student_user_id == User.id)
+        .filter(
+            ClassStudent.class_id.in_(class_ids),
+            ClassStudent.deleted == False,
+            User.deleted == False,
+        )
         .group_by(ClassStudent.class_id)
         .all()
     )
 
-    # Преобразуем в dict: {class_id: count}
     count_map = {class_id: count for class_id, count in counts}
 
-    # Собираем ClassOut объекты
     result_items = []
     for cls in page.items:
         result_items.append(

@@ -1,1 +1,42 @@
-<p>parents works!</p>
+<h1 nz-typography style="margin-bottom: 30px">Parents</h1>
+
+<nz-table
+  #parentTable
+  [nzFrontPagination]="false"
+  [nzData]="parents"
+  nzBordered
+  nzShowPagination
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzPageIndex]="page"
+  [nzPageSize]="count"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>Parent ID</th>
+      <th>Parent</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of parentTable.data">
+      <td>{{ u.id }}</td>
+      <td>{{ u.first_name + ' ' + u.last_name }}</td>
+      <td>{{ u.email }}</td>
+      <td>
+        <nz-tag [nzColor]="getRoleTagColor(u.role)">
+          {{ u.role }}
+        </nz-tag>
+      </td>
+      <td>
+        <button nz-button nzType="link" [routerLink]="[u.id]">
+          <i nz-icon nzType="eye" nzTheme="outline"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

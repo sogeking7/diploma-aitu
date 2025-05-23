@@ -1,0 +1,104 @@
+<div *ngIf="isLoading">
+  <nz-spin nzTip="Loading..."></nz-spin>
+</div>
+
+<div *ngIf="!isLoading && parent">
+  <div style="display: flex; justify-content: space-between; margin-bottom: 24px">
+    <button nz-button nzType="default" (click)="goBack()">
+      <span nz-icon nzType="arrow-left"></span>
+      Back to Parents
+    </button>
+  </div>
+  <nz-descriptions nzTitle="User Information" nzBordered [nzColumn]="1">
+    <nz-descriptions-item nzTitle="First Name">{{ parent.first_name }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Last Name">{{ parent.last_name }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Email">{{ parent.email }}</nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Role">
+      <nz-tag [nzColor]="getRoleTagColor(parent.role)">{{ parent.role }}</nz-tag>
+    </nz-descriptions-item>
+  </nz-descriptions>
+</div>
+
+<div *ngIf="isLoadingStudents">
+  <nz-spin nzTip="Loading students..."></nz-spin>
+</div>
+
+<div *ngIf="!isLoadingStudents && parentStudents">
+  <div class="students-header">
+    <h5 nz-typography style="margin: 24px 0; font-weight: 700">Children</h5>
+    <button nz-button nzType="primary" style="margin-bottom: 24px" (click)="showAddStudentModal()">
+      <span nz-icon nzType="user-add"></span>
+      Add Student
+    </button>
+  </div>
+
+  <nz-table
+    #viewStudentsTable
+    [nzData]="parentStudents"
+    [nzFrontPagination]="false"
+    nzShowPagination
+    nzShowSizeChanger
+    nzBordered
+    [nzPageSize]="studentsCount"
+    [nzPageIndex]="studentsPage"
+    [nzTotal]="studentsTotal"
+    [nzSize]="'small'"
+    [nzLoading]="isLoadingStudents"
+    [nzShowPagination]="true"
+    (nzQueryParams)="onQueryParamsChange($event)">
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of viewStudentsTable.data">
+        <td>{{ student.student_user_id }}</td>
+        <td>{{ student.student_user?.first_name }}</td>
+        <td>{{ student.student_user?.last_name }}</td>
+        <td>{{ student.student_user?.email }}</td>
+        <td>
+          <button
+            nz-button
+            nzType="link"
+            nzDanger
+            nzSize="small"
+            nz-popconfirm
+            nzPopconfirmTitle="Are you sure you want to remove this student from the class?"
+            nzPopconfirmPlacement="left"
+            (nzOnConfirm)="removeStudent(student.id)">
+            <span nz-icon nzType="user-delete"></span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+
+<!-- Add Student Modal -->
+<nz-modal [(nzVisible)]="isAddStudentModalVisible" nzTitle="Add Student to Class" (nzOnCancel)="handleCancelAddStudent()" [nzFooter]="modalFooter">
+  <ng-container *nzModalContent>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Student</nz-form-label>
+      <nz-form-control [nzSpan]="18">
+        <nz-select [(ngModel)]="selectedStudentId" nzPlaceHolder="Select a student" [nzLoading]="isLoadingAvailableStudents" style="width: 100%">
+          <nz-option
+            *ngFor="let student of availableStudents"
+            [nzValue]="student.id"
+            [nzLabel]="student.first_name + ' ' + student.last_name + ' (' + student.email + ')'"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+  </ng-container>
+  <ng-template #modalFooter>
+    <button nz-button nzType="default" (click)="handleCancelAddStudent()">Cancel</button>
+    <button nz-button nzType="primary" [disabled]="!selectedStudentId || isAddingStudent" (click)="handleAddStudent()">
+      <span nz-icon nzType="user-add"></span>
+      Add Student
+    </button>
+  </ng-template>
+</nz-modal>
