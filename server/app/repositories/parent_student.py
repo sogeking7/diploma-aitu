@@ -88,24 +88,34 @@ def get_parent_student_by_ids(
 def insert_parent_student(
     db: Session, parent_student_in: ParentStudentCreate
 ) -> ParentStudentOut:
+    StudentUser = aliased(User)
+    ParentUser = aliased(User)
+
     existing = (
         db.query(ParentStudent)
-        .filter_by(
-            parent_user_id=parent_student_in.parent_user_id,
-            student_user_id=parent_student_in.student_user_id,
+        .join(StudentUser, ParentStudent.student_user_id == StudentUser.id)
+        .join(ParentUser, ParentStudent.parent_user_id == ParentUser.id, isouter=True)
+        .filter(
+            ParentStudent.parent_user_id == parent_student_in.parent_user_id,
+            ParentStudent.student_user_id == parent_student_in.student_user_id,
+        )
+        .options(
+            joinedload(ParentStudent.student_user),
+            joinedload(ParentStudent.parent_user),
         )
         .first()
     )
     if existing:
         if existing.deleted:
-            # Reactivate the soft-deleted record
             existing.deleted = False
             db.commit()
             db.refresh(existing)
             return ParentStudentOut.model_validate(existing, from_attributes=True)
-    else:
-        raise ValueError("This student is already enrolled in this class")
-
+        else:
+            raise ValueError(
+                "This student is already enrolled in this parent's account"
+            )
+    print("html")
     db_parent_student = ParentStudent(
         parent_user_id=parent_student_in.parent_user_id,
         student_user_id=parent_student_in.student_user_id,

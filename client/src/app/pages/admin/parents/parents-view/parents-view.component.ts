@@ -117,8 +117,9 @@ export class ParentsViewComponent implements OnInit {
     }
 
     this.parentStudentService.readStudentsByParent(this.parentId).subscribe({
-      next: pageParentStudents => {
-        this.parentStudents = pageParentStudents.items;
+      next: list => {
+        this.parentStudents = list.items;
+        this.studentsTotal = Number(list.total);
         this.isLoadingStudents = false;
       },
       error: error => {

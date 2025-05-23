@@ -105,7 +105,7 @@ export class FacesCreateComponent implements OnInit {
       this.facesService.addFace(userId, imageBlob).subscribe({
         next: () => {
           this.notification.success('Success', 'Face has been added successfully!');
-          this.router.navigate(['/users'], { relativeTo: this.router.routerState.root });
+          this.router.navigate(['/faces'], { relativeTo: this.router.routerState.root });
         },
         error: err => {
           this.isSubmitting = false;

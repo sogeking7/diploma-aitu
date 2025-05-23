@@ -71,19 +71,20 @@ def get_class_student_by_ids(
 def insert_class_student(
     db: Session, class_student_in: ClassStudentCreate
 ) -> ClassStudentOut:
-    # Check if relationship already exists, regardless of soft-deletion
+
     existing = (
         db.query(ClassStudent)
-        .filter_by(
-            class_id=class_student_in.class_id,
-            student_user_id=class_student_in.student_user_id,
+        .join(User, ClassStudent.student_user_id == User.id)
+        .filter(
+            ClassStudent.class_id == class_student_in.class_id,
+            ClassStudent.student_user_id == class_student_in.student_user_id,
         )
+        .options(joinedload(ClassStudent.student_user))
         .first()
     )
 
     if existing:
         if existing.deleted:
-            # Reactivate the soft-deleted record
             existing.deleted = False
             db.commit()
             db.refresh(existing)
@@ -91,7 +92,6 @@ def insert_class_student(
         else:
             raise ValueError("This student is already enrolled in this class")
 
-    # If not exists, insert new
     db_class_student = ClassStudent(
         class_id=class_student_in.class_id,
         student_user_id=class_student_in.student_user_id,
