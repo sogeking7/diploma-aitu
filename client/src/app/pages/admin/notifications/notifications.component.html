@@ -1,0 +1,60 @@
+<h1 nz-typography style="margin-bottom: 30px">Notifications</h1>
+
+<div class="table-operations" style="margin-bottom: 16px">
+  <button nz-button nzType="primary" [routerLink]="['new']"><i nz-icon nzType="user-add"></i>Create Notification</button>
+</div>
+
+<nz-table
+  #userTable
+  [nzFrontPagination]="false"
+  [nzData]="notifications"
+  nzBordered
+  nzShowPagination
+  nzShowSizeChanger
+  [nzSize]="'small'"
+  [nzTotal]="total"
+  [nzLoading]="loading"
+  [nzPageIndex]="page"
+  [nzPageSize]="count"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>Notification ID</th>
+      <th>Title</th>
+      <th>Body</th>
+      <th>User</th>
+      <th>Read</th>
+      <th>Created at</th>
+      <th>Updated at</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let u of userTable.data">
+      <td>{{ u.id }}</td>
+      <td>{{ u.title }}</td>
+      <td>{{ u.body }}</td>
+      <td>
+        <nz-icon nzType="user" nzTheme="outline" />
+        {{ u.user?.first_name + ' ' + u.user?.last_name }}
+      </td>
+      <td>
+        {{ u.is_read ? 'Yes' : 'No' }}
+      </td>
+      <td>
+        {{ u.created_at | date: 'medium' }}
+      </td>
+      <td>
+        {{ u.updated_at | date: 'medium' }}
+      </td>
+      <td>
+        <!--      <button nz-button nzType="link" [routerLink]="['edit', u.id]">-->
+        <!--        <i nz-icon nzType="edit" nzTheme="outline"></i>-->
+        <!--      </button>-->
+        <!--      <button nz-button nzType="link" [routerLink]="[u.id]">-->
+        <!--        <i nz-icon nzType="eye" nzTheme="outline"></i>-->
+        <!--      </button>-->
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -1,0 +1,42 @@
+<div class="page-header" style="margin-bottom: 16px">
+  <button nz-button (click)="goBack()"><i nz-icon nzType="arrow-left"></i> Back</button>
+</div>
+
+<nz-card>
+  <form nz-form [formGroup]="notificationForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>User ID</nz-form-label>
+      <nz-form-control [nzSpan]="14" [nzErrorTip]="userIdErrorTpl">
+        <input nz-input formControlName="user_id" type="number" placeholder="User ID" />
+        <ng-template #userIdErrorTpl>
+          <ng-container *ngIf="notificationForm.get('user_id')?.hasError('required')"> User ID is required </ng-container>
+          <ng-container *ngIf="notificationForm.get('user_id')?.hasError('pattern')"> User ID must be a number </ng-container>
+          <ng-container *ngIf="notificationForm.get('user_id')?.hasError('min')"> User ID must be greater than zero </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Title</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input notification title!">
+        <input nz-input formControlName="title" placeholder="Title" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6">Body</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <nz-textarea-count [nzMaxCharacterCount]="100">
+          <textarea rows="4" formControlName="body" nz-input placeholder="Body"></textarea>
+        </nz-textarea-count>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control [nzOffset]="6" [nzSpan]="14">
+        <button nz-button nzType="primary" [disabled]="isSubmitting || !notificationForm.valid">Create Face</button>
+        <button nz-button (click)="cancelCreate()" type="button" style="margin-left: 8px">Cancel</button>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+</nz-card>

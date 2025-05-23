@@ -50,6 +50,10 @@ export const routes: Routes = [
         path: 'parents',
         loadChildren: () => import('./pages/admin/parents/parents.routes').then(m => m.PARENTS_ROUTES),
       },
+      {
+        path: 'notifications',
+        loadChildren: () => import('./pages/admin/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES),
+      },
     ],
   },
   {
