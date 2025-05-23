@@ -68,6 +68,7 @@ export class UsersViewComponent implements OnInit {
     this.usersService.deleteUser(this.userId!).subscribe({
       next: () => {
         this.notification.success('Success', 'User has been deleted successfully!');
+        this.router.navigate(['/users']);
       },
       error: err => {
         this.notification.error('Error', err.error?.detail || 'Failed to delete user. Please try again.');

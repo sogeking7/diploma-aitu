@@ -12,7 +12,12 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 def get_enrolled_students_count(db: Session, class_id: int) -> int:
     return (
         db.query(ClassStudent)
-        .filter(ClassStudent.class_id == class_id, ClassStudent.deleted == False)
+        .join(User, ClassStudent.student_user_id == User.id)
+        .filter(
+            ClassStudent.class_id == class_id,
+            ClassStudent.deleted == False,
+            User.deleted == False,
+        )
         .count()
     )
 
@@ -21,7 +26,7 @@ def get_active_classes(db: Session):
     return (
         db.query(Class)
         .join(User, Class.teacher_user_id == User.id)
-        .filter(Class.deleted == False)
+        .filter(Class.deleted == False, User.deleted == False)
         .options(joinedload(Class.teacher_user))
     )
 

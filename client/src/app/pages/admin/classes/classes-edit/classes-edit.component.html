@@ -1,0 +1,33 @@
+<h2 nz-typography>Edit Class</h2>
+
+<div *ngIf="isLoading" style="display: flex; justify-content: center; padding: 50px">
+  <nz-spin nzTip="Loading..."></nz-spin>
+</div>
+
+<div *ngIf="!isLoading && classData">
+  <form nz-form [formGroup]="editForm" (ngSubmit)="submitForm()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Class Name</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input the class name!">
+        <input nz-input formControlName="name" placeholder="Class Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Teacher</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please select a teacher!">
+        <nz-select formControlName="teacher_user_id" nzPlaceHolder="Select a teacher" [nzLoading]="isLoadingTeachers">
+          <nz-option *ngFor="let teacher of teachers" [nzValue]="teacher.id" [nzLabel]="teacher.first_name + ' ' + teacher.last_name"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    <div>
+      <button nz-button nzType="default" (click)="goBack()" style="margin-right: 8px">Cancel</button>
+      <button nz-button nzType="primary" [disabled]="isSaving" type="submit">
+        <span nz-icon nzType="save"></span>
+        Save Changes
+      </button>
+    </div>
+  </form>
+</div>

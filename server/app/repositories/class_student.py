@@ -17,7 +17,7 @@ def get_active_class_students(db: Session):
     return (
         db.query(ClassStudent)
         .join(User, ClassStudent.student_user_id == User.id)
-        .filter(ClassStudent.deleted == False)
+        .filter(ClassStudent.deleted == False, User.deleted == False)
         .options(joinedload(ClassStudent.student_user))
     )
 

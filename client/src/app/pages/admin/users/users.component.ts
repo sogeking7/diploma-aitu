@@ -43,19 +43,6 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  searchData(reset: boolean = false): void {
-    const targetPage = reset ? 1 : this.page;
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: targetPage,
-        count: this.count,
-      },
-      queryParamsHandling: 'merge',
-    });
-  }
-
   private loadUsers(): void {
     this.loading = true;
     this.usersService.readUsers(undefined, this.page, this.count).subscribe({
