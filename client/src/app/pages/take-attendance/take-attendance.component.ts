@@ -7,13 +7,14 @@ import { AttendancesService, FaceAttendanceOut } from '../../../lib/open-api';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { interval, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-face',
   templateUrl: './take-attendance.component.html',
   styleUrl: './take-attendance.component.css',
   standalone: true,
-  imports: [CommonModule, NzButtonModule, NzIconModule, DatePipe, NzResultModule],
+  imports: [CommonModule, NzButtonModule, NzIconModule, DatePipe, NzResultModule, NzTypographyComponent],
 })
 export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoElement') videoElement!: ElementRef;
@@ -24,6 +25,9 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
   public showSuccessResult = false;
   public countdownValue = 3;
   private countdownSubscription: Subscription | null = null;
+
+  public showFailureResult = false;
+  public failureMessage = '';
 
   constructor(
     private attendanceService: AttendancesService,
@@ -42,6 +46,7 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
 
   captureAndSearch(): void {
     this.isSearching = true;
+    this.showFailureResult = false; // Reset failure overlay
 
     const video = this.videoElement.nativeElement;
     const canvas = document.createElement('canvas');
@@ -65,14 +70,17 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
               },
               error: error => {
                 this.isSearching = false;
+                this.failureMessage = error.error?.detail || error.error?.message.split(':')[1] || 'Failed to search for faces. Please try again.';
+                this.showFailureResult = true; // Show failure overlay
+                this.startCountdown();
                 this.cdr.detectChanges();
-                this.notification.error('Error', error.error?.detail || error.error?.message || 'Failed to search for faces. Please try again.');
               },
             });
           } else {
             this.isSearching = false;
+            this.failureMessage = 'Could not initialize camera capture. Please try again.';
+            this.showFailureResult = true; // Show failure overlay
             this.cdr.detectChanges();
-            this.notification.error('Error', 'Could not initialize camera capture. Please try again.');
           }
         },
         'image/jpeg',
@@ -94,6 +102,7 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
         },
         complete: () => {
           this.resetCamera();
+          this.resetFailure();
         },
       });
   }
@@ -135,5 +144,12 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
     }
+  }
+
+  resetFailure(): void {
+    this.cancelCountdown();
+    this.showFailureResult = false;
+    this.failureMessage = '';
+    this.cdr.detectChanges();
   }
 }

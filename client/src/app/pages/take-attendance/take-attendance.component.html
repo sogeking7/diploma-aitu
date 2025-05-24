@@ -47,3 +47,18 @@
     </div>
   </nz-result>
 </div>
+
+<div *ngIf="showFailureResult" class="failure-container">
+  <nz-result nzIcon="frown" nzStatus="error" nzTitle="Failure">
+    <div nz-result-content>
+      <h4 nz-typography style="text-align: center">{{ failureMessage }}</h4>
+    </div>
+    <div nz-result-extra>
+      <div class="countdown">
+        <span class="countdown-label">Closing in: </span>
+        <span class="countdown-timer">{{ countdownValue }}</span>
+      </div>
+      <button nz-button nzType="primary" (click)="resetFailure()">Close</button>
+    </div>
+  </nz-result>
+</div>
