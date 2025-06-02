@@ -12,16 +12,15 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.component.html',
+  templateUrl: './users.page.html',
   imports: [CommonModule, NzTableModule, NzButtonModule, NzTagModule, RouterModule, NzIconModule, NzTypographyComponent],
-  styleUrls: ['./users.component.css'],
   standalone: true,
 })
-export class UsersComponent implements OnInit {
+export class UsersPage implements OnInit {
   users: UserOut[] = [];
   loading = true;
   page = 1;
-  count = 10;
+  count = 20;
   total = 0;
 
   constructor(
@@ -37,7 +36,7 @@ export class UsersComponent implements OnInit {
       const countFromUrl = params['count'];
 
       this.page = pageFromUrl ? +pageFromUrl : 1;
-      this.count = countFromUrl ? +countFromUrl : 10;
+      this.count = countFromUrl ? +countFromUrl : 20;
 
       this.loadUsers();
     });

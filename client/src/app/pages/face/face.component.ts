@@ -39,14 +39,17 @@ export class FaceComponent implements AfterViewInit, OnDestroy {
   captureAndSearch(): void {
     this.isSearching = true;
 
-    const video = this.videoElement.nativeElement;
+    const video = this.videoElement.nativeElement as HTMLVideoElement;
+    const rect = video.getBoundingClientRect();
+
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
 
     const context = canvas.getContext('2d');
     if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      context.drawImage(video, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
 
       canvas.toBlob(
         (blob: Blob | null) => {

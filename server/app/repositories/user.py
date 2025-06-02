@@ -1,4 +1,4 @@
-from typing import Optional, List, Any
+from typing import Optional
 
 from fastapi_pagination import Page
 from pydantic import EmailStr
@@ -7,6 +7,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserUpdate, UserOut, RoleEnum
 from app.core.security import get_password_hash, verify_password
 from fastapi_pagination.ext.sqlalchemy import paginate
+from app.models.user import RoleEnum as ModelRoleEnum
 
 
 def get_active_users(db: Session):
@@ -25,13 +26,8 @@ def get_users(
     db: Session,
     role: Optional[RoleEnum] = None,
 ) -> Page[UserOut]:
-    query = get_active_users(db)
+    query = get_active_users(db).order_by(User.first_name, User.last_name)
     if role:
-        # Convert schema RoleEnum to model RoleEnum value
-        # The schema RoleEnum has uppercase values (ADMIN, TEACHER, STUDENT, PARENT)
-        # The model RoleEnum has lowercase values (admin, teacher, student, parent)
-        from app.models.user import RoleEnum as ModelRoleEnum
-
         model_role = ModelRoleEnum(role.value)
         query = query.filter(User.role == model_role)
     return paginate(db, query)

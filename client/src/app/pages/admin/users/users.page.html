@@ -1,7 +1,7 @@
 <h1 nz-typography style="margin-bottom: 30px">Users</h1>
 
 <div class="table-operations" style="margin-bottom: 16px">
-  <button nz-button nzType="primary" [routerLink]="['new']"><i nz-icon nzType="user-add"></i>Create User</button>
+  <button nz-button nzType="primary" [routerLink]="['new']"><i nz-icon nzType="user-add"></i>New User</button>
 </div>
 
 <nz-table
@@ -34,16 +34,11 @@
       <td>{{ u.last_name }}</td>
       <td>{{ u.email }}</td>
       <td>
-        <nz-tag [nzColor]="getRoleTagColor(u.role)">
-          {{ u.role }}
-        </nz-tag>
+        <nz-tag [nzColor]="getRoleTagColor(u.role)"> {{ u.role }} </nz-tag>
       </td>
       <td>
         <button nz-button nzType="link" [routerLink]="['edit', u.id]">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-        </button>
-        <button nz-button nzType="link" [routerLink]="[u.id]">
-          <i nz-icon nzType="eye" nzTheme="outline"></i>
         </button>
       </td>
     </tr>

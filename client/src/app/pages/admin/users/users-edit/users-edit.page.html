@@ -1,0 +1,78 @@
+<h2 nz-typography>{{ user ? 'Edit User' : 'Create User' }}</h2>
+
+@if (isLoading.user) {
+<div class="loading-container">
+  <nz-spin nzTip="Loading user data..."></nz-spin>
+</div>
+} @if (!isLoading.user && editForm) {
+<div>
+  <form nz-form [formGroup]="editForm" (ngSubmit)="saveUser()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>First Name</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input first name!">
+        <input nz-input formControlName="firstName" placeholder="First Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Last Name</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please input last name!">
+        <input nz-input formControlName="lastName" placeholder="Last Name" />
+      </nz-form-control>
+    </nz-form-item>
+
+    @if (!user) {
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired="">Email</nz-form-label>
+      <nz-form-control [nzSpan]="14" [nzErrorTip]="emailErrorTpl">
+        <input nz-input formControlName="email" placeholder="Email" type="email" />
+        <ng-template #emailErrorTpl let-control>
+          @if (control.hasError('required')) {
+          <ng-container>Please input email!</ng-container>
+          } @if (control.hasError('email')) {
+          <ng-container>Please enter a valid email address!</ng-container>
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    }
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Role</nz-form-label>
+      <nz-form-control [nzSpan]="14" nzErrorTip="Please select a role!">
+        <nz-select formControlName="role" nzPlaceHolder="Select a role">
+          <nz-option nzValue="admin" nzLabel="Admin"></nz-option>
+          <nz-option nzValue="parent" nzLabel="Parent"></nz-option>
+          <nz-option nzValue="student" nzLabel="Student"></nz-option>
+          <nz-option nzValue="teacher" nzLabel="Teacher"></nz-option>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+
+    @if (!user) { @if (editForm.controls.password.errors) { {{ editForm.controls.password.errors['required'] }} }
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>Password</nz-form-label>
+      <nz-form-control [nzSpan]="14" [nzErrorTip]="passwordErrorTpl">
+        <nz-input-group [nzSuffix]="passwordSuffixIcon">
+          <input nz-input formControlName="password" [type]="passwordVisible ? 'text' : 'password'" placeholder="Password" />
+        </nz-input-group>
+        <ng-template #passwordSuffixIcon>
+          <i nz-icon [nzType]="passwordVisible ? 'eye' : 'eye-invisible'" (click)="togglePasswordVisibility()"></i>
+        </ng-template>
+        <ng-template #passwordErrorTpl let-control>
+          @if (control.hasError('required')) {
+          <ng-container>Please input password!</ng-container>
+          } @if (control.hasError('minlength')) {
+          <ng-container>Password must be at least 8 characters!</ng-container>
+          }
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    }
+    <div class="form-actions">
+      <button nz-button nzType="default" (click)="cancel()" style="margin-right: 8px">Cancel</button>
+      <button nz-button nzType="primary" [disabled]="!editForm.valid || isLoading.save" type="submit" [nzLoading]="isLoading.save">Save</button>
+    </div>
+  </form>
+</div>
+}

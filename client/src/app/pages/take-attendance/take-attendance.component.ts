@@ -4,7 +4,6 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzResultModule } from 'ng-zorro-antd/result';
 import { AttendancesService, FaceAttendanceOut } from '../../../lib/open-api';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { interval, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { NzTypographyComponent } from 'ng-zorro-antd/typography';
@@ -31,8 +30,7 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private attendanceService: AttendancesService,
-    private cdr: ChangeDetectorRef,
-    private notification: NzNotificationService
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngAfterViewInit(): void {
@@ -48,14 +46,17 @@ export class TakeAttendanceComponent implements AfterViewInit, OnDestroy {
     this.isSearching = true;
     this.showFailureResult = false; // Reset failure overlay
 
-    const video = this.videoElement.nativeElement;
+    const video = this.videoElement.nativeElement as HTMLVideoElement;
+    const rect = video.getBoundingClientRect();
+
     const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+
+    canvas.width = rect.width;
+    canvas.height = rect.height;
 
     const context = canvas.getContext('2d');
     if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      context.drawImage(video, rect.left, rect.top, rect.width, rect.height, 0, 0, rect.width, rect.height);
 
       canvas.toBlob(
         blob => {
