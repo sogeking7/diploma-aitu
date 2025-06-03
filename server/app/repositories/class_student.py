@@ -39,7 +39,10 @@ def get_class_students(db: Session) -> Page[ClassStudentOut]:
 
 def get_students_by_class(db: Session, class_id: int) -> Page[ClassStudentOut]:
     return paginate(
-        db, get_active_class_students(db).filter(ClassStudent.class_id == class_id)
+        db,
+        get_active_class_students(db)
+        .filter(ClassStudent.class_id == class_id)
+        .order_by(User.first_name, User.last_name),
     )
 
 

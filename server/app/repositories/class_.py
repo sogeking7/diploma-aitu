@@ -43,7 +43,7 @@ def get_class(db: Session, class_id: int) -> Optional[ClassOut]:
 
 
 def get_classes(db: Session) -> Page[ClassOut]:
-    base_query = get_active_classes(db)
+    base_query = get_active_classes(db).order_by(Class.name)
     page = paginate(db, base_query)
 
     class_ids = [cls.id for cls in page.items]

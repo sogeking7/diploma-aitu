@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { CommonModule } from '@angular/common';
@@ -9,6 +9,8 @@ import { UserOut, UsersService } from '../../../../lib/open-api';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-parents',
@@ -20,41 +22,34 @@ export class ParentsPage implements OnInit {
   parents: UserOut[] = [];
   loading = true;
   page = 1;
-  count = 10;
+  count = 20;
   total = 0;
 
-  constructor(
-    private parentsService: UsersService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notification: NzNotificationService
-  ) {}
+  private parentsService = inject(UsersService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notification = inject(NzNotificationService);
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const pageFromUrl = params['page'];
-      const countFromUrl = params['count'];
-
-      this.page = pageFromUrl ? +pageFromUrl : 1;
-      this.count = countFromUrl ? +countFromUrl : 10;
-
-      this.loadParents();
+      this.page = params['page'] ? +params['page'] : 1;
+      this.count = params['count'] ? +params['count'] : 20;
     });
+    await this.loadParents();
   }
 
-  private loadParents(): void {
+  private async loadParents() {
     this.loading = true;
-    this.parentsService.readUsers('parent', undefined, this.page, this.count).subscribe({
-      next: list => {
-        this.loading = false;
-        this.total = Number(list.total);
-        this.parents = list.items;
-      },
-      error: error => {
-        this.loading = false;
-        this.notification.error('Error', error.error?.detail || 'Failed to load parents. Please try again.');
-      },
-    });
+    try {
+      const res = await firstValueFrom(this.parentsService.readUsers('parent', undefined, this.page, this.count));
+      this.total = Number(res.total);
+      this.parents = res.items;
+    } catch (e) {
+      const error = e as HttpErrorResponse;
+      this.notification.error('Error', error.error?.message() || 'Failed to load parents. Please try again.');
+    } finally {
+      this.loading = false;
+    }
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {

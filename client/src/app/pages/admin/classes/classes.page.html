@@ -1,7 +1,10 @@
-<h1 nz-typography style="margin-bottom: 30px">Classes</h1>
+<h1 nz-typography class="!mb-10">Classes</h1>
 
-<div class="table-operations" style="margin-bottom: 16px">
-  <button nz-button nzType="primary" [routerLink]="['new']"><i nz-icon nzType="plus"></i>Create Class</button>
+<div class="mb-4">
+  <button nz-button nzType="primary" [routerLink]="['new']">
+    <nz-icon nzType="plus-add" />
+    New Class
+  </button>
 </div>
 
 <nz-table
@@ -30,25 +33,16 @@
   <tbody>
     <tr *ngFor="let c of classTable.data">
       <td>{{ c.id }}</td>
-      <td>
-        {{ c.name }}
-      </td>
-      <td>
-        {{ c.teacher_user_id }}
-      </td>
+      <td>{{ c.name }}</td>
+      <td>{{ c.teacher_user_id }}</td>
       <td>
         <nz-icon nzType="user" nzTheme="outline" />
         {{ c.teacher_user.first_name + ' ' + c.teacher_user.last_name }}
       </td>
-      <td>
-        {{ c.enrolled_students_count || 0 }}
-      </td>
+      <td>{{ c.enrolled_students_count || 0 }}</td>
       <td>
         <button nz-button nzType="link" [routerLink]="['edit', c.id]">
           <i nz-icon nzType="edit" nzTheme="outline"></i>
-        </button>
-        <button nz-button nzType="link" [routerLink]="[c.id]">
-          <i nz-icon nzType="eye" nzTheme="outline"></i>
         </button>
       </td>
     </tr>

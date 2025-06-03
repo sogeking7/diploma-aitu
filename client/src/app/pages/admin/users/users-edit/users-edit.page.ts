@@ -73,7 +73,7 @@ export class UsersEditPage implements OnInit {
       });
     } catch (e: unknown) {
       const error = e as HttpErrorResponse;
-      this.notification.error('Error', error.error?.description || 'Failed to load user');
+      this.notification.error('Error', error.error?.message || 'Failed to load user');
       await this.router.navigate(['/users']);
     } finally {
       this.isLoading.user = false;

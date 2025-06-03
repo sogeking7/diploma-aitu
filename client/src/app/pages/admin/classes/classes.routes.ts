@@ -1,24 +1,18 @@
 import { Routes } from '@angular/router';
-import { ClassesComponent } from './classes.component';
-import { ClassesCreateComponent } from './classes-create/classes-create.component';
-import { ClassesEditComponent } from './classes-edit/classes-edit.component';
-import { ClassesViewComponent } from './classes-view/classes-view.component';
+import { ClassesPage } from './classes.page';
+import { ClassesEditPage } from './classes-edit/classes-edit.page';
 
 export const CLASSES_ROUTES: Routes = [
   {
     path: '',
-    component: ClassesComponent,
+    component: ClassesPage,
   },
   {
     path: 'new',
-    component: ClassesCreateComponent,
+    component: ClassesEditPage,
   },
   {
     path: 'edit/:id',
-    component: ClassesEditComponent,
-  },
-  {
-    path: ':id',
-    component: ClassesViewComponent,
+    component: ClassesEditPage,
   },
 ];

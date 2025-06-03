@@ -1,4 +1,4 @@
-<h1 nz-typography style="margin-bottom: 30px">Parents</h1>
+<h1 nz-typography class="!mb-10">Parents</h1>
 
 <nz-table
   #parentTable
@@ -28,7 +28,7 @@
       <td>{{ u.first_name + ' ' + u.last_name }}</td>
       <td>{{ u.email }}</td>
       <td>
-        <nz-tag [nzColor]="getRoleTagColor(u.role)"> {{ u.role }} </nz-tag>
+        <nz-tag [nzColor]="getRoleTagColor(u.role)"> {{ u.role }}</nz-tag>
       </td>
       <td>
         <button nz-button nzType="link" [routerLink]="['edit', u.id]">

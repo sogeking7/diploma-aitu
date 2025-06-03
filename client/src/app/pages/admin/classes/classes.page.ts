@@ -4,8 +4,7 @@ import { NzTagModule } from 'ng-zorro-antd/tag';
 import { CommonModule } from '@angular/common';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { getRoleTagColor } from '../../../../lib/common';
-import { ClassesService, ClassOut, UserOut } from '../../../../lib/open-api';
+import { ClassesService, ClassOut } from '../../../../lib/open-api';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
@@ -13,17 +12,16 @@ import { NzTypographyComponent } from 'ng-zorro-antd/typography';
 
 @Component({
   selector: 'app-classes',
-  templateUrl: './classes.component.html',
+  templateUrl: './classes.page.html',
   imports: [CommonModule, NzTableModule, NzButtonModule, NzTagModule, RouterModule, NzIconModule, NzSpinModule, NzTypographyComponent],
-  styleUrls: ['./classes.component.css'],
   standalone: true,
 })
-export class ClassesComponent implements OnInit {
+export class ClassesPage implements OnInit {
   classes: ClassOut[] = [];
 
   loading = true;
   page = 1;
-  count = 10;
+  count = 20;
   total = 0;
 
   constructor(
@@ -39,7 +37,7 @@ export class ClassesComponent implements OnInit {
       const countFromUrl = params['count'];
 
       this.page = pageFromUrl ? +pageFromUrl : 1;
-      this.count = countFromUrl ? +countFromUrl : 10;
+      this.count = countFromUrl ? +countFromUrl : 20;
 
       this.loadClasses();
     });
@@ -72,10 +70,4 @@ export class ClassesComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
-
-  getTeacherDisplayName(teacher: UserOut): string {
-    return `${teacher.first_name} ${teacher.last_name}`;
-  }
-
-  public getRoleTagColor = getRoleTagColor;
 }
