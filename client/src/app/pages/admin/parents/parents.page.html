@@ -28,13 +28,11 @@
       <td>{{ u.first_name + ' ' + u.last_name }}</td>
       <td>{{ u.email }}</td>
       <td>
-        <nz-tag [nzColor]="getRoleTagColor(u.role)">
-          {{ u.role }}
-        </nz-tag>
+        <nz-tag [nzColor]="getRoleTagColor(u.role)"> {{ u.role }} </nz-tag>
       </td>
       <td>
-        <button nz-button nzType="link" [routerLink]="[u.id]">
-          <i nz-icon nzType="eye" nzTheme="outline"></i>
+        <button nz-button nzType="link" [routerLink]="['edit', u.id]">
+          <i nz-icon nzType="edit" nzTheme="outline"></i>
         </button>
       </td>
     </tr>

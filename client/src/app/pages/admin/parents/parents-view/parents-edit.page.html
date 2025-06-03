@@ -1,0 +1,95 @@
+@if (isLoading.parent) {
+<div class="p-10">
+  <nz-spin nzTip="Loading parent..."></nz-spin>
+</div>
+} @else if (parent) {
+<div class="mb-6">
+  <button nz-button nzType="default" (click)="goBack()">
+    <nz-icon nzType="arrow-left" />
+    Go back
+  </button>
+</div>
+
+<h2 nz-typography>{{ parent.last_name + " " + parent.first_name }}</h2>
+
+@if (isLoading.parentStudents) {
+<div class="p-10">
+  <nz-spin nzTip="Loading parent students..."></nz-spin>
+</div>
+} @else if (parentStudents) {
+<nz-form-item class="flex gap-4">
+  <nz-form-control [nzSpan]="10">
+    <nz-select
+      [(ngModel)]="selectedStudentId"
+      nzPlaceHolder="Select a student"
+      [nzLoading]="isLoading.searchStudents"
+      nzShowSearch
+      nzServerSearch
+      (nzOnSearch)="onStudentSearch($event)">
+      @if (!isLoading.searchStudents) { @for (s of searchStudents; track s) {
+      <nz-option [nzValue]="s.id" [nzLabel]="s.first_name + ' ' + s.last_name + ' (' + s.email + ')'"> </nz-option>
+      } } @else {
+      <nz-option nzDisabled nzCustomContent>
+        <nz-icon nzType="loading" class="loading-icon" />
+        Loading students...
+      </nz-option>
+      }
+    </nz-select>
+  </nz-form-control>
+  <button
+    nz-button
+    nzType="primary"
+    [disabled]="isLoading.addStudent || !selectedStudentId"
+    (click)="parent && addStudent(parent.id, selectedStudentId!)">
+    <nz-icon nzType="user-add" />
+    Add Student
+  </button>
+</nz-form-item>
+}
+
+<nz-table
+  #viewStudentsTable
+  [nzData]="parentStudents"
+  [nzFrontPagination]="false"
+  nzShowPagination
+  nzShowSizeChanger
+  nzBordered
+  [nzPageSize]="studentsPagination.count"
+  [nzPageIndex]="studentsPagination.page"
+  [nzTotal]="studentsPagination.total"
+  [nzSize]="'small'"
+  [nzLoading]="isLoading.parentStudents"
+  [nzShowPagination]="true"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+      <th>Student ID</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of viewStudentsTable.data">
+      <td>{{ student.student_user_id }}</td>
+      <td>{{ student.student_user?.first_name }}</td>
+      <td>{{ student.student_user?.last_name }}</td>
+      <td>{{ student.student_user?.email }}</td>
+      <td>
+        <button
+          nz-button
+          nzType="link"
+          nzDanger
+          nzSize="small"
+          nz-popconfirm
+          nzPopconfirmTitle="Are you sure you want to remove this student from the class?"
+          nzPopconfirmPlacement="left"
+          (nzOnConfirm)="removeStudent(student.id)">
+          <span nz-icon nzType="user-delete"></span>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+}

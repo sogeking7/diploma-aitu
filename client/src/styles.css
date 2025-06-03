@@ -1,9 +1,11 @@
+@import 'tailwindcss';
+
 /* You can add global styles to this file, and also import other style files */
 @font-face {
   font-family: 'Manrope';
   src: url('assets/fonts/Manrope/static/Manrope-Regular.ttf') format('truetype');
   font-weight: normal;
-  font-style: normal;
+  font-style: noermal;
 }
 
 @font-face {

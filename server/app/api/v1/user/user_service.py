@@ -17,8 +17,10 @@ def get_user(db: Session, user_id: int) -> Optional[User]:
     return user_repo.get_user(db, user_id)
 
 
-def get_users(db: Session, role: Optional[RoleEnum] = None) -> Page[UserOut]:
-    return user_repo.get_users(db, role=role)
+def get_users(
+    db: Session, role: Optional[RoleEnum] = None, q: Optional[str] = None
+) -> Page[UserOut]:
+    return user_repo.get_users(db, role=role, q=q)
 
 
 def create_user(db: Session, user_in: UserCreate) -> UserOut:

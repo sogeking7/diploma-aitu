@@ -182,7 +182,7 @@ export class ClassesViewComponent implements OnInit {
     this.isLoadingAvailableStudents = true;
 
     // First, get all students
-    this.usersService.readUsers('student', 1, 100).subscribe({
+    this.usersService.readUsers('student', undefined, 1, 100).subscribe({
       next: response => {
         const allStudents = response.items;
 

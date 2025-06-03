@@ -44,7 +44,7 @@ export class UsersPage implements OnInit {
 
   private loadUsers(): void {
     this.loading = true;
-    this.usersService.readUsers(undefined, this.page, this.count).subscribe({
+    this.usersService.readUsers(undefined, undefined, this.page, this.count).subscribe({
       next: list => {
         this.loading = false;
         this.total = Number(list.total);

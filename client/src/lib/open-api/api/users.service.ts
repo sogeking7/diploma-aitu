@@ -281,21 +281,23 @@ export class UsersService extends BaseService {
 
     /**
      * Read Users
-     * Get all users, optionally filtered by role.  - **role**: Filter users by role. Valid values are RoleEnum members (ADMIN, TEACHER, STUDENT, PARENT).
      * @param role 
+     * @param q 
      * @param page Page number
      * @param size Page size
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public readUsers(role?: RoleEnum, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageUserOut>;
-    public readUsers(role?: RoleEnum, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageUserOut>>;
-    public readUsers(role?: RoleEnum, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageUserOut>>;
-    public readUsers(role?: RoleEnum, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public readUsers(role?: RoleEnum, q?: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PageUserOut>;
+    public readUsers(role?: RoleEnum, q?: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PageUserOut>>;
+    public readUsers(role?: RoleEnum, q?: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PageUserOut>>;
+    public readUsers(role?: RoleEnum, q?: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>role, 'role');
+        localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+          <any>q, 'q');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
           <any>page, 'page');
         localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

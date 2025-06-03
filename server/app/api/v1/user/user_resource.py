@@ -41,13 +41,9 @@ def read_users(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
     role: Optional[RoleEnum] = None,
+    q: Optional[str] = None,
 ):
-    """
-    Get all users, optionally filtered by role.
-
-    - **role**: Filter users by role. Valid values are RoleEnum members (ADMIN, TEACHER, STUDENT, PARENT).
-    """
-    return user_service.get_users(db, role=role)
+    return user_service.get_users(db, role=role, q=q)
 
 
 @router.get("/{user_id}", response_model=UserOut)

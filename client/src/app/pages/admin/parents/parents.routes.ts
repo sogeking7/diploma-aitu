@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
-import { ParentsComponent } from './parents.component';
-import { ParentsViewComponent } from './parents-view/parents-view.component';
+import { ParentsPage } from './parents.page';
+import { ParentsEditPage } from './parents-view/parents-edit.page';
 
 export const PARENTS_ROUTES: Routes = [
   {
     path: '',
-    component: ParentsComponent,
+    component: ParentsPage,
   },
   {
-    path: ':id',
-    component: ParentsViewComponent,
+    path: 'edit/:id',
+    component: ParentsEditPage,
   },
 ];

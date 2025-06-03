@@ -94,7 +94,7 @@ export class ClassesEditComponent implements OnInit {
 
   private loadTeachers(): void {
     this.isLoadingTeachers = true;
-    this.usersService.readUsers('teacher', 1, 100).subscribe({
+    this.usersService.readUsers('teacher', undefined, 1, 100).subscribe({
       next: response => {
         this.teachers = response.items;
         this.isLoadingTeachers = false;

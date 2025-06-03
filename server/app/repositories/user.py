@@ -8,6 +8,7 @@ from app.schemas.user import UserCreate, UserUpdate, UserOut, RoleEnum
 from app.core.security import get_password_hash, verify_password
 from fastapi_pagination.ext.sqlalchemy import paginate
 from app.models.user import RoleEnum as ModelRoleEnum
+from sqlalchemy import or_
 
 
 def get_active_users(db: Session):
@@ -23,10 +24,18 @@ def get_user_by_email(db: Session, email: EmailStr) -> Optional[UserOut]:
 
 
 def get_users(
-    db: Session,
-    role: Optional[RoleEnum] = None,
+    db: Session, role: Optional[RoleEnum] = None, q: Optional[str] = None
 ) -> Page[UserOut]:
     query = get_active_users(db).order_by(User.first_name, User.last_name)
+    if q:
+        search = f"%{q}%"
+        query = query.filter(
+            or_(
+                User.first_name.ilike(search),
+                User.last_name.ilike(search),
+                User.email.ilike(search),
+            )
+        )
     if role:
         model_role = ModelRoleEnum(role.value)
         query = query.filter(User.role == model_role)

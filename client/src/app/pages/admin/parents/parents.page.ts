@@ -12,12 +12,11 @@ import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-parents',
-  templateUrl: './parents.component.html',
+  templateUrl: './parents.page.html',
   imports: [CommonModule, NzTableModule, NzButtonModule, NzTagModule, RouterModule, NzIconModule, NzTypographyComponent],
-  styleUrls: ['./parents.component.css'],
   standalone: true,
 })
-export class ParentsComponent implements OnInit {
+export class ParentsPage implements OnInit {
   parents: UserOut[] = [];
   loading = true;
   page = 1;
@@ -45,7 +44,7 @@ export class ParentsComponent implements OnInit {
 
   private loadParents(): void {
     this.loading = true;
-    this.parentsService.readUsers('parent', this.page, this.count).subscribe({
+    this.parentsService.readUsers('parent', undefined, this.page, this.count).subscribe({
       next: list => {
         this.loading = false;
         this.total = Number(list.total);

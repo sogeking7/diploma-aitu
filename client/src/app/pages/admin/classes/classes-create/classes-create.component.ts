@@ -49,7 +49,7 @@ export class ClassesCreateComponent implements OnInit {
 
   loadTeachers(): void {
     this.loading = true;
-    this.usersService.readUsers(RoleEnum.teacher, 1, 100).subscribe({
+    this.usersService.readUsers(RoleEnum.teacher, undefined, 1, 100).subscribe({
       next: response => {
         this.loading = false;
         this.teachers = response.items;
