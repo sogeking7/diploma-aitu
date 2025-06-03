@@ -17,7 +17,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-parents-view',
+  selector: 'app-parents-edit',
   imports: [
     NzButtonComponent,
     NzIconDirective,
