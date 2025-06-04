@@ -1,0 +1,16 @@
+@if (user) {
+<nz-card>
+  <div class="flex items-center flex-col gap-4">
+    <nz-avatar [nzSize]="100" nzIcon="user" class=""></nz-avatar>
+    <h3 nz-typography class="text-center">{{ user.first_name }} {{ user.last_name }}</h3>
+  </div>
+
+  <nz-descriptions nzTitle="User Information" nzBordered [nzColumn]="{ xxl: 1, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }">
+    <nz-descriptions-item nzTitle="First Name"> {{ user.first_name }} </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Last Name"> {{ user.last_name }} </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Email"> {{ user.email }} </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="Role"> {{ user.role }} </nz-descriptions-item>
+    <nz-descriptions-item nzTitle="ID"> {{ user.id }} </nz-descriptions-item>
+  </nz-descriptions>
+</nz-card>
+}
