@@ -24,7 +24,7 @@ async def add_face(
     embedding = face_detector.extract_embedding(img_pil)
 
     if embedding is None:
-        raise HTTPException(status_code=400, detail="No face detected in the image")
+        raise HTTPException(status_code=400, detail="No face detected")
 
     new_face: FaceOut = face_repo.insert_face(db, FaceCreate(user_id=user_id))
 
@@ -56,7 +56,7 @@ async def search_face(
         embedding = face_detector.extract_embedding(img_pil)
 
         if embedding is None:
-            raise HTTPException(status_code=400, detail="No face detected in the image")
+            raise HTTPException(status_code=400, detail="No face detected")
 
         raw_results = face_db.search_face(
             embedding=embedding[0], threshold=threshold, k=k

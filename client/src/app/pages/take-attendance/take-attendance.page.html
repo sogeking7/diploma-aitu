@@ -1,0 +1,52 @@
+<div class="relative w-[500px] rounded-[40px] h-full overflow-hidden m-auto">
+  <video #videoElement autoplay playsinline class="w-full h-full object-cover"></video>
+  <div class="absolute bottom-5 left-1/2 z-10 -translate-x-1/2">
+    <button
+      nz-button
+      nzType="primary"
+      nzShape="circle"
+      class="!size-[60px]"
+      (click)="captureAndSearch()"
+      [nzLoading]="isLoading.create"
+      [disabled]="isLoading.create">
+      <nz-icon nzType="unlock" class="!text-2xl" nzTheme="outline" />
+    </button>
+  </div>
+
+  @if (!isLoading.create && !error && faceAttendance && countdownValue) {
+  <div class="absolute size-full top-0 left-0 z-20 flex items-center justify-center">
+    <nz-result nzStatus="success">
+      <div nz-result-content class="!rounded-2xl">
+        <div class="desc flex flex-col gap-4 [&>p]:!m-0">
+          <p nz-paragraph>
+            <strong>Student:</strong>
+            {{ faceAttendance.student_user?.first_name }} {{ faceAttendance.student_user?.last_name }}
+          </p>
+          <p nz-paragraph>
+            <strong>Student ID:</strong>
+            {{ faceAttendance.student_user_id }}
+          </p>
+          <p nz-paragraph>
+            <strong>Time In:</strong>
+            {{ faceAttendance.time_in | date: 'medium' }}
+          </p>
+          @if (faceAttendance?.time_out) {
+          <p nz-paragraph>
+            <strong>Time Out:</strong>
+            {{ faceAttendance.time_out | date: 'medium' }}
+          </p>
+          }
+        </div>
+      </div>
+    </nz-result>
+  </div>
+  } @if (!isLoading.create && error && countdownValue) {
+  <div class="absolute size-full top-0 left-0 z-20 flex items-center justify-center">
+    <nz-result nzStatus="error">
+      <div nz-result-content class="!rounded-2xl">
+        <h4 nz-typography class="text-center !m-0">{{ error }}</h4>
+      </div>
+    </nz-result>
+  </div>
+  }
+</div>

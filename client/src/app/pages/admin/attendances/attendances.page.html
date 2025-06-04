@@ -1,4 +1,4 @@
-<h1 nz-typography style="margin-bottom: 30px">Attendances</h1>
+<h1 nz-typography class="!mb-10">Attendances</h1>
 <nz-table
   #attendanceTable
   [nzFrontPagination]="false"
@@ -14,33 +14,21 @@
   (nzQueryParams)="onQueryParamsChange($event)">
   <thead>
     <tr>
-      <th>ID</th>
-      <th>Student ID</th>
-      <th>Student</th>
       <th>Time in</th>
       <th>Time out</th>
-      <!--      <th>Status</th>-->
-      <!--      <th>Actions</th>-->
+      <th>Student ID</th>
+      <th>Student</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let a of attendanceTable.data">
-      <td>{{ a.id }}</td>
+      <td>{{ a.time_in | date: 'medium' }}</td>
+      <td>{{ a.time_out | date: 'medium' }}</td>
       <td>{{ a.student_user_id }}</td>
       <td>
         <nz-icon nzType="user" nzTheme="outline" />
         {{ a.student_user?.first_name + ' ' + a.student_user?.last_name }}
       </td>
-      <td>{{ a.time_in | date: 'medium' }}</td>
-      <td>{{ a.time_out | date: 'medium' }}</td>
-      <!--      <td>-->
-      <!--        <nz-tag [nzColor]="a.status === 'present' ? 'green' : 'red'">-->
-      <!--          {{ a.status }}-->
-      <!--        </nz-tag>-->
-      <!--      </td>-->
-      <!--      <td>-->
-      <!--        <button nz-button nzType="link">View</button>-->
-      <!--      </td>-->
     </tr>
   </tbody>
 </nz-table>

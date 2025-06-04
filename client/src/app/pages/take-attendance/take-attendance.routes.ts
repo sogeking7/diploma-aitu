@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { TakeAttendanceComponent } from './take-attendance.component';
+import { TakeAttendancePage } from './take-attendance.page';
 
-export const TAKE_ATTENDANCE_ROUTES: Routes = [{ path: '', component: TakeAttendanceComponent }];
+export const TAKE_ATTENDANCE_ROUTES: Routes = [{ path: '', component: TakeAttendancePage }];

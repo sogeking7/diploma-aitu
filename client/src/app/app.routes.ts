@@ -35,10 +35,6 @@ export const routes: Routes = [
         loadChildren: () => import('./pages/admin/attendances/attendances.routes').then(m => m.ATTENDANCES_ROUTES),
       },
       {
-        path: 'face',
-        loadChildren: () => import('./pages/face/face.routes').then(m => m.FACE_ROUTES),
-      },
-      {
         path: 'faces',
         loadChildren: () => import('./pages/admin/faces/faces.routes').then(m => m.FACES_ROUTES),
       },
@@ -49,10 +45,6 @@ export const routes: Routes = [
       {
         path: 'parents',
         loadChildren: () => import('./pages/admin/parents/parents.routes').then(m => m.PARENTS_ROUTES),
-      },
-      {
-        path: 'notifications',
-        loadChildren: () => import('./pages/admin/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES),
       },
     ],
   },

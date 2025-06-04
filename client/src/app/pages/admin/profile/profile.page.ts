@@ -13,9 +13,9 @@ import { NzTypographyComponent } from 'ng-zorro-antd/typography';
   selector: 'app-profile',
   standalone: true,
   imports: [CommonModule, NzCardModule, NzAvatarModule, NzDescriptionsModule, NzButtonModule, NzIconModule, NzTypographyComponent],
-  templateUrl: './profile.component.html',
+  templateUrl: './profile.page.html',
 })
-export class ProfileComponent implements OnInit {
+export class ProfilePage implements OnInit {
   user?: UserOut | null;
 
   private authenticateService = inject(AuthenticationService);

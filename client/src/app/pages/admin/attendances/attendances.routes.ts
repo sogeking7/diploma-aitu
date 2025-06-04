@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { AttendancesComponent } from './attendances.component';
+import { AttendancesPage } from './attendances.page';
 
-export const ATTENDANCES_ROUTES: Routes = [{ path: '', component: AttendancesComponent }];
+export const ATTENDANCES_ROUTES: Routes = [{ path: '', component: AttendancesPage }];

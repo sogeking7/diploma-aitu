@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { NzTagModule } from 'ng-zorro-antd/tag';
 import { DatePipe, NgForOf } from '@angular/common';
@@ -7,63 +7,49 @@ import { AttendanceOut, AttendancesService } from '../../../../lib/open-api';
 import { LucideAngularModule } from 'lucide-angular';
 import { NzIconDirective } from 'ng-zorro-antd/icon';
 import { NzTypographyComponent } from 'ng-zorro-antd/typography';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { firstValueFrom } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-attendances',
-  templateUrl: './attendances.component.html',
+  templateUrl: './attendances.page.html',
   imports: [NzTableModule, NgForOf, NzTagModule, DatePipe, LucideAngularModule, NzIconDirective, NzTypographyComponent],
-  styleUrls: ['./attendances.component.css'],
   standalone: true,
 })
-export class AttendancesComponent implements OnInit {
+export class AttendancesPage implements OnInit {
   attendances: AttendanceOut[] = [];
 
   loading = true;
   page = 1;
-  count = 10;
+  count = 50;
   total = 0;
 
-  constructor(
-    private attendancesService: AttendancesService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  private attendancesService = inject(AttendancesService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private notification = inject(NzNotificationService);
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      const pageFromUrl = params['page'];
-      const countFromUrl = params['count'];
-
-      this.page = pageFromUrl ? +pageFromUrl : 1;
-      this.count = countFromUrl ? +countFromUrl : 10;
-
-      this.loadAttendances();
+      this.page = params['page'] ? +params['page'] : 1;
+      this.count = params['count'] ? +params['count'] : 20;
     });
+    await this.loadAttendances();
   }
 
-  searchData(reset: boolean = false): void {
-    let targetPage = this.page;
-    if (reset) {
-      targetPage = 1;
-    }
-
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        page: targetPage,
-        count: this.count,
-      },
-      queryParamsHandling: 'merge',
-    });
-  }
-
-  private loadAttendances(): void {
+  private async loadAttendances() {
     this.loading = true;
-    this.attendancesService.readAttendances(this.page, this.count).subscribe(list => {
+    try {
+      const res = await firstValueFrom(this.attendancesService.readAttendances(this.page, this.count));
+      this.total = Number(res.total);
+      this.attendances = res.items;
+    } catch (e) {
+      const error = e as HttpErrorResponse;
+      this.notification.error('Error', error.error?.message() || 'Failed to load users. Please try again.');
+    } finally {
       this.loading = false;
-      this.total = Number(list.total);
-      this.attendances = list.items;
-    });
+    }
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
