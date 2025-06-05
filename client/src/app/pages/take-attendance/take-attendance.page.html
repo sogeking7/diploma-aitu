@@ -30,7 +30,7 @@
             <strong>Time In:</strong>
             {{ faceAttendance.time_in | date: 'medium' }}
           </p>
-          @if (faceAttendance?.time_out) {
+          @if (faceAttendance.time_out) {
           <p nz-paragraph>
             <strong>Time Out:</strong>
             {{ faceAttendance.time_out | date: 'medium' }}

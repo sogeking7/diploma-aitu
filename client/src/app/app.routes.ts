@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
-import { LoginComponent } from './pages/auth/login/login.component';
+import { LoginPage } from './pages/auth/login/login.page';
 import { AppLayoutComponent } from './components/layout/app-layout.component';
 
 export const routes: Routes = [
@@ -11,7 +11,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'welcome',
+        redirectTo: '/users',
         pathMatch: 'full',
       },
       {
@@ -50,7 +50,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginPage,
   },
   {
     path: '**',
