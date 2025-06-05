@@ -14,6 +14,7 @@
   (nzQueryParams)="onQueryParamsChange($event)">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Time in</th>
       <th>Time out</th>
       <th>Student ID</th>
@@ -22,6 +23,7 @@
   </thead>
   <tbody>
     <tr *ngFor="let a of attendanceTable.data">
+      <td>{{ a.id }}</td>
       <td>{{ a.time_in | date: 'medium' }}</td>
       <td>{{ a.time_out | date: 'medium' }}</td>
       <td>{{ a.student_user_id }}</td>

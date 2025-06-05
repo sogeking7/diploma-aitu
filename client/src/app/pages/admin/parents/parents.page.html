@@ -25,7 +25,10 @@
   <tbody>
     <tr *ngFor="let u of parentTable.data">
       <td>{{ u.id }}</td>
-      <td>{{ u.first_name + ' ' + u.last_name }}</td>
+      <td>
+        <nz-icon nzType="user" nzTheme="outline" />
+        {{ u.first_name + ' ' + u.last_name }}
+      </td>
       <td>{{ u.email }}</td>
       <td>
         <nz-tag [nzColor]="getRoleTagColor(u.role)"> {{ u.role }}</nz-tag>

@@ -1,0 +1,63 @@
+@if (isEdit) {
+<div class="mb-6">
+  <button nz-button nzType="default" (click)="goBack()">
+    <nz-icon nzType="arrow-left" />
+    Go back
+  </button>
+</div>
+}
+
+<h2 nz-typography>{{ isEdit ? 'Edit Student Face' : 'Create Student Face' }}</h2>
+
+<form nz-form (ngSubmit)="submitForm()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>Student</nz-form-label>
+    <nz-form-control [nzSpan]="10">
+      <nz-select
+        name="student"
+        [(ngModel)]="selectedStudentId"
+        nzPlaceHolder="Select a student"
+        [nzLoading]="isLoading.searchStudents"
+        nzShowSearch
+        nzServerSearch
+        (nzOnSearch)="onStudentSearch($event)">
+        @if (!isLoading.searchStudents) { @for (s of searchStudents; track s) {
+        <nz-option [nzValue]="s.id" [nzLabel]="s.first_name + ' ' + s.last_name + ' (' + s.email + ')'"></nz-option>
+        } } @else {
+        <nz-option nzDisabled nzCustomContent>
+          <nz-icon nzType="loading" class="loading-icon" />
+          Loading students...
+        </nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>Face Image</nz-form-label>
+    <nz-form-control [nzSpan]="14" nzErrorTip="Please select an image">
+      <nz-upload nzType="drag" [nzMultiple]="false" [nzBeforeUpload]="beforeUpload" (nzChange)="handleChange($event)" [nzShowUploadList]="false">
+        <p class="ant-upload-drag-icon">
+          <span nz-icon nzType="inbox"></span>
+        </p>
+        <p class="ant-upload-text">Click or drag image file to this area to upload</p>
+        <p class="ant-upload-hint">Support for single image upload. Use a clear face photo for best recognition results.</p>
+      </nz-upload>
+
+      <div *ngIf="selectedFile" class="mt-3">
+        <strong>Selected file:</strong> {{ selectedFile.name }} ({{ (selectedFile.size / 1024).toFixed(2) }} KB)
+      </div>
+
+      <!-- Keep the legacy file input as a fallback or for testing -->
+      <div class="mt-3" style="display: none">
+        <input #fileInput type="file" (change)="onFileSelected($event)" accept="image/*" />
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control [nzOffset]="6" [nzSpan]="14">
+      <button nz-button nzType="primary" [disabled]="isLoading.save || !selectedStudentId || !selectedFile">Create Face</button>
+      <button nz-button (click)="cancelCreate()" type="button" style="margin-left: 8px">Cancel</button>
+    </nz-form-control>
+  </nz-form-item>
+</form>

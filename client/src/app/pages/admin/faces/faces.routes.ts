@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
-import { FacesComponent } from './faces.component';
-import { FacesCreateComponent } from './faces-create/faces-create.component';
+import { FacesPage } from './faces.page';
+import { FacesEditPage } from './faces-edit/faces-edit.page';
 
 export const FACES_ROUTES: Routes = [
   {
     path: '',
-    component: FacesComponent,
+    component: FacesPage,
   },
   {
     path: 'new',
-    component: FacesCreateComponent,
+    component: FacesEditPage,
+  },
+  {
+    path: 'edit/:id',
+    component: FacesEditPage,
   },
 ];

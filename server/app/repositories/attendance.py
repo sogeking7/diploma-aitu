@@ -1,4 +1,5 @@
 from typing import Optional
+from sqlalchemy import desc
 from sqlalchemy.orm import Session, joinedload
 from datetime import datetime
 from fastapi_pagination import Page
@@ -14,6 +15,7 @@ def get_active_attendances(db: Session):
         db.query(Attendance)
         .join(User, Attendance.student_user_id == User.id)
         .filter(Attendance.deleted == False)
+        .order_by(desc(Attendance.time_in))
         .options(joinedload(Attendance.student_user))
     )
 

@@ -27,6 +27,7 @@
     <nz-form-label [nzSpan]="6" nzRequired>Teacher</nz-form-label>
     <nz-form-control [nzSpan]="10">
       <nz-select
+        name="teacher"
         formControlName="teacher_user_id"
         nzPlaceHolder="Select a teacher"
         [nzLoading]="isLoading.searchTeachers"
@@ -60,6 +61,7 @@
   <nz-form-item class="flex gap-4">
     <nz-form-control [nzSpan]="10">
       <nz-select
+        name="student"
         [(ngModel)]="selectedStudentId"
         nzPlaceHolder="Select a student"
         [nzLoading]="isLoading.searchStudents"
