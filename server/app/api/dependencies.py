@@ -89,11 +89,10 @@ def get_current_user(
 
 
 def is_admin(user: User) -> bool:
-    return user and user.role and user.role.lower() == RoleEnum.ADMIN.value.lower()
-
+    return user.role.value == RoleEnum.ADMIN.value
 
 def user_has_role(user: User, required_role: RoleEnum) -> bool:
-    return user and user.role and user.role.lower() == required_role.value.lower()
+    return user.role.value == required_role.value
 
 
 def require_role(required_role: RoleEnum):
