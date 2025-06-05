@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
-import { AuthService, UserOut, UsersService } from '../../lib/open-api';
+import { AuthService, RoleEnum, UserOut, UsersService } from '../../lib/open-api';
 
 @Injectable({
   providedIn: 'root',
@@ -24,8 +24,7 @@ export class AuthenticationService {
   async isAuthenticated() {
     try {
       this.user = await lastValueFrom(this.userService.readCurrentUser());
-      console.log('userSession', this.user);
-      return true;
+      return this.user.role === RoleEnum.admin;
     } catch {
       this.user = null;
       return false;

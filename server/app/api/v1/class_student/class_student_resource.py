@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from fastapi_pagination import Page
 
 from app.models.user import User
-from app.api.dependencies import get_db, get_current_user
+from app.api.dependencies import get_db, get_current_user, require_admin_role
 from app.schemas.class_student import (
     ClassStudentOut,
     ClassStudentCreate,
@@ -18,7 +18,7 @@ router = APIRouter()
 def create_class_student(
     class_student_in: ClassStudentCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_student_service.create_class_student(
         db=db, class_student_in=class_student_in
@@ -30,7 +30,7 @@ def update_class_student(
     class_student_id: int,
     class_student_in: ClassStudentUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_student_service.update_class_student(
         db=db, class_student_id=class_student_id, class_student_in=class_student_in
@@ -78,7 +78,7 @@ def read_class_student(
 def delete_class_student(
     class_student_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_student_service.delete_class_student(
         db, class_student_id=class_student_id

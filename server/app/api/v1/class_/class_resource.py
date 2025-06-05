@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Page
 from sqlalchemy.orm import Session
 
-from app.api.dependencies import get_db, get_current_user
+from app.api.dependencies import get_db, get_current_user, require_admin_role
 from app.models.user import User
 from app.schemas.class_ import ClassOut, ClassCreate, ClassUpdate
 from app.api.v1.class_ import class_service
@@ -14,7 +14,7 @@ router = APIRouter()
 def create_class(
     class_in: ClassCreate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_service.create_class(db=db, class_in=class_in)
 
@@ -24,7 +24,7 @@ def update_class(
     class_id: int,
     class_in: ClassUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_service.update_class(db=db, class_id=class_id, class_in=class_in)
 
@@ -59,6 +59,6 @@ def read_class(
 def delete_class(
     class_id: int,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_admin_role),
 ):
     return class_service.delete_class(db, class_id=class_id)
