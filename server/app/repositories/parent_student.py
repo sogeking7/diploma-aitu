@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 from sqlalchemy.orm import Session, joinedload, aliased
 from sqlalchemy.exc import IntegrityError
 from fastapi import HTTPException, status
@@ -66,6 +66,16 @@ def get_parents_by_student(db: Session, student_user_id: int) -> Page[ParentStud
         get_active_parent_students(db).filter(
             ParentStudent.student_user_id == student_user_id
         ),
+    )
+
+
+def get_parents_by_student_2(
+    db: Session, student_user_id: int
+) -> List[type[ParentStudentOut]]:
+    return (
+        get_active_parent_students(db)
+        .filter(ParentStudent.student_user_id == student_user_id)
+        .all()
     )
 
 

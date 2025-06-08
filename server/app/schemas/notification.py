@@ -1,27 +1,17 @@
-from typing import Optional
-
 from pydantic import BaseModel
-from datetime import datetime
-
-from app.schemas.user import UserBase
 
 
 class NotificationBase(BaseModel):
     user_id: int
-    title: str
-    body: Optional[str]
+    chat_id: int
 
 
-class NotificationCreate(NotificationBase):
-    pass
+class NotificationCreate(BaseModel):
+    chat_id: int
 
 
 class NotificationOut(NotificationBase):
     id: int
-    is_read: bool
-    user: Optional[UserBase]
-    created_at: datetime
-    updated_at: Optional[datetime]
 
     class Config:
         from_attributes = True
