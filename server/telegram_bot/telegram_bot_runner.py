@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from telegram.ext import (
     ApplicationBuilder,
     CommandHandler,
@@ -13,10 +16,10 @@ from telegram_bot.service.telegram_service import (
     cancel,
 )
 
+load_dotenv()
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+
 EMAIL, PASSWORD = range(2)
-
-BOT_TOKEN = "8191476050:AAEeq4Pliit4glM4PamhHBgp4JfaUCK3SLc"
-
 
 def start_telegram_bot():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
